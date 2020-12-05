@@ -64,13 +64,13 @@ public class OmorimapSub extends HttpServlet {
 		out.println("	function btnsave(){");
 		out.println("	  	ret = confirm(\"保存します。よろしいですか？\");");
 		out.println("	  	if (ret == true){");
-		out.println("		  	location.href = \"http://www.google.co.jp/\";");
+		out.println("		  	document.form1.submit();");
 		out.println("	  	}");
 		out.println("	}");
 		out.println("	function btncancel(){");
 		out.println("	  	ret = confirm(\"一覧画面に戻ります。よろしいですか？\");");
 		out.println("	  	if (ret == true){");
-		out.println("		  	location.href=\"http://localhost:8080/omorimap/Omorimap\";");
+		out.println("		  	location.href=\"/omorimap/Omorimap\";");
 		out.println("	  	}");
 		out.println("	}");
 		out.println("	</script>");
@@ -79,7 +79,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("	<p class=\"title\">");
 		out.println("		新規投稿＆編集画面");
 		out.println("	</p>");
-		out.println("	<form method=\"post\">");
+		out.println("	<form name=\"form1\" action=\"/omorimap/EntryServlet\" method=\"post\">");
 		out.println("		<p class=\"shopname\">");
 		out.println("			店舗名");
 		out.println("			&nbsp;");
@@ -95,7 +95,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("				</span>");
 		out.println("		</div>");
 		out.println("		<div class=\"button\">");
-		out.println("			<input type=\"submit\" value=\"保存\" onClick=\"btnsave()\">");
+		out.println("			<input type=\"button\" value=\"保存\" onClick=\"btnsave()\">");
 		out.println("			&nbsp;");
 		out.println("			<input type=\"button\" value=\"キャンセル\" onClick=\"btncancel()\">");
 		out.println("		</div>");

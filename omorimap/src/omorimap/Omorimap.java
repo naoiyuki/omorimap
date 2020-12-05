@@ -2,9 +2,7 @@ package omorimap;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -28,7 +26,7 @@ public class Omorimap extends HttpServlet {
 
     // 配列宣言
     // SampleDTO型のオブジェクトを格納するArrayList
-    private ArrayList<DTO>list = null;
+    private ArrayList<DTO> list = null;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -65,18 +63,15 @@ public class Omorimap extends HttpServlet {
 		out.println("<body>");
 		out.println("	<div class=\"main\">");
 		out.println("<h4 align=\"right\">");
-		Calendar cal1 = Calendar.getInstance();
-		Date date1 = cal1.getTime();
-		SimpleDateFormat sdformat
-		= new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		String fdate1 = sdformat.format(date1);
 
+
+		String fdate1 = NowTime.nowTime();
 
 		out.println(fdate1);
 		out.println("</h4>");
 		out.println("		<h1>大森周辺マップ</h1>");
 		out.println("		<div align =\"right\">");
-		out.println("			<button  onclick=\"location.href='http://localhost:8080/omorimap/OmorimapSub'\">");
+		out.println("			<button  onclick=\"location.href='/omorimap/OmorimapSub'\">");
 		out.println("			新規投稿");
 		out.println("			</button>");
 		out.println("		</div>");
@@ -109,7 +104,7 @@ public class Omorimap extends HttpServlet {
 
 	    	// DAOオブジェクト化
 	    	ConDb objCndb = new ConDb();
-	    	list = objCndb.selectAll();
+	    	list = objCndb.selectAllDb();
 
 	    	for(int i = 0;i < list.size();i++){
 	    		DTO Dto = list.get(i);

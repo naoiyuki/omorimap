@@ -1,18 +1,22 @@
 package omorimap;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+
+
 public class ConDb {
 	//接続用の情報をフィールドに定数として定義
-	    private static final String RDB_DRIVE="com.mysql.jdbc.Driver";
-	    private static final String URL="jdbc:mysql://localhost/mysql?serverTimezone=JST";
-	    private static final String USER="root";
-	    private static final String PASSWD="naoi";
+	private static final String RDB_DRIVE="com.mysql.jdbc.Driver";
+	private static final String URL="jdbc:mysql://localhost/mysql?serverTimezone=JST";
+	private static final String USER="root";
+	private static final String PASSWD="naoi";
 
 
 	public static Connection createConnection(){
@@ -41,8 +45,8 @@ public class ConDb {
         }
 	}
 
-	// テーブルに登録された全てのデータをArrayList<SampleDTO>型オブジェクトへ格納し、戻り値として返す
-	public static ArrayList<DTO> selectAll(){
+	// DBのテーブルに登録された全てのデータをArrayList<SampleDTO>型オブジェクトへ格納し、戻り値として返す
+	public static ArrayList<DTO> selectAllDb(){
 		// 変数宣言
         Connection conn = null;  // DBコネクション
         Statement stmt = null;   // SQLステートメント
@@ -70,6 +74,8 @@ public class ConDb {
 	    		objDto.setIp(rs.getString("ip"));
 	    		list.add(objDto);
 	    	}
+
+	    	//接続などを閉じる
 	    	rs.close();
 	    	stmt.close();
 	    	disConnection(createConnection());
@@ -88,6 +94,44 @@ public class ConDb {
         }
 
 		return list;
+	}
+
+	// 受け取った値をDBに登録
+	public static void UpdateDb(String shopname,String comments,Date dt,String ip){
+		// 変数宣言
+        Connection conn = null;  // DBコネクション
+        PreparedStatement pstmt = null;   // SQLステートメント
+
+        // SQL文作成
+        String sql = "INSERT INTO list (shopname,comments,dt,ip) VALUES (?,?,?,?)";
+
+		try {
+			conn= createConnection();
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1,shopname);
+			pstmt.setString(2,comments);
+			pstmt.setDate(3,dt);
+			pstmt.setString(4,ip);
+
+			pstmt.executeUpdate();
+
+			//接続などを閉じる
+	    	pstmt.close();
+	    	disConnection(createConnection());
+
+
+		}catch(SQLException e){
+            System.out.println("Errorが発生しました！\n"+e);
+        }finally{
+            // リソースの開放
+            if(pstmt != null){
+                try{pstmt.close();}catch(SQLException ignore){}
+            }
+            if(conn != null){
+                try{conn.close();}catch(SQLException ignore){}
+            }
+        }
 	}
 
 }

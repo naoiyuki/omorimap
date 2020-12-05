@@ -1,6 +1,6 @@
 package omorimap;
 
-import java.util.Date;
+import java.sql.Date;
 
 public class DTO {
 	private int no;				//番号
