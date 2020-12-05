@@ -25,7 +25,7 @@ public class Omorimap extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-    
+
     // 配列宣言
     // SampleDTO型のオブジェクトを格納するArrayList
     private ArrayList<DTO>list = null;
@@ -76,7 +76,7 @@ public class Omorimap extends HttpServlet {
 		out.println("</h4>");
 		out.println("		<h1>大森周辺マップ</h1>");
 		out.println("		<div align =\"right\">");
-		out.println("			<button>");
+		out.println("			<button  onclick=\"location.href='http://localhost:8080/omorimap/OmorimapSub'\">");
 		out.println("			新規投稿");
 		out.println("			</button>");
 		out.println("		</div>");
