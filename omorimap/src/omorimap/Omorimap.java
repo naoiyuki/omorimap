@@ -27,6 +27,8 @@ public class Omorimap extends HttpServlet {
     // 配列宣言
     // SampleDTO型のオブジェクトを格納するArrayList
     private ArrayList<DTO> list = null;
+    //現在時刻の取得
+    String fdate1 = NowTime.nowTime();
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,10 +65,6 @@ public class Omorimap extends HttpServlet {
 		out.println("<body>");
 		out.println("	<div class=\"main\">");
 		out.println("<h4 align=\"right\">");
-
-
-		String fdate1 = NowTime.nowTime();
-
 		out.println(fdate1);
 		out.println("</h4>");
 		out.println("		<h1>大森周辺マップ</h1>");
@@ -89,7 +87,6 @@ public class Omorimap extends HttpServlet {
 		out.println("                </th>");
 		out.println("            </tr>");
 
-
 //		Connection conn = null;
 //	    String url = "jdbc:mysql://localhost/mysql?serverTimezone=JST";
 //	    String user = "root";
@@ -103,9 +100,11 @@ public class Omorimap extends HttpServlet {
 //	      	ResultSet rs = stmt.executeQuery(sql);
 
 	    	// DAOオブジェクト化
+	    	//全レコードを取得
 	    	ConDb objCndb = new ConDb();
 	    	list = objCndb.selectAllDb();
 
+	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
 	    		DTO Dto = list.get(i);
 
@@ -115,6 +114,7 @@ public class Omorimap extends HttpServlet {
 //	    		Date dt = rs.getDate("dt");
 //	    		String ip = rs.getString("ip");
 
+	    		//レコードの各カラムの値を取得
 	    		int no = Dto.getNo();
 	    		String shopname = Dto.getShopname();
 	    		String comments = Dto.getComments();
@@ -138,7 +138,6 @@ public class Omorimap extends HttpServlet {
 	    		out.println("                </div>");
 	    		out.println("                </td>");
 	    		out.println("            </tr>");
-
 	    	}
 
 	    }
