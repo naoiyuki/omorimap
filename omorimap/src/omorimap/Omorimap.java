@@ -59,7 +59,24 @@ public class Omorimap extends HttpServlet {
 		out.println("		table td {/*table内のtdに対して*/");
 		out.println("		padding: 3px 10px;/*上下3pxで左右10px*/");
 		out.println("		}");
+		out.println("		table td.num{");
+		out.println("		text-align:center;");
+		out.println("		}");
+		out.println("		table td.dlt{");
+		out.println("		text-align:center;");
+		out.println("		}");
 		out.println("	</style>");
+		out.println("	<script>");
+		out.println("		function btndlt(){");
+		out.println(" 		 	ret = confirm(\"この行の情報を削除します。よろしいですか？\");");
+		out.println("  			if (ret == true){");
+		out.println("		  		location.href = \"http://www.google.co.jp/\";");
+		out.println("  			}");
+		out.println("  			else {");
+		out.println("  				location.href = \"https://www.bing.com/\";");
+		out.println("  			}");
+		out.println("		}");
+		out.println("	</script>");
 		out.println("	");
 		out.println("</head>");
 		out.println("<body>");
@@ -76,7 +93,7 @@ public class Omorimap extends HttpServlet {
 		out.println("		<p> </p>");
 		out.println("		<table border=\"1\">");
 		out.println("            <tr>");
-		out.println("                <th class>");
+		out.println("                <th>");
 		out.println("                No");
 		out.println("                </th>");
 		out.println("                <th>");
@@ -84,6 +101,9 @@ public class Omorimap extends HttpServlet {
 		out.println("                </th>");
 		out.println("                <th>");
 		out.println("                最終更新");
+		out.println("                </th>");
+		out.println("                <th>");
+		out.println("                削除");
 		out.println("                </th>");
 		out.println("            </tr>");
 
@@ -122,11 +142,15 @@ public class Omorimap extends HttpServlet {
 	    		String ip = Dto.getIp();
 
 	    		out.println("            <tr>");
-	    		out.println("                <td>");
+	    		out.println("                <td class=\"num\">");
+	    		out.println("                	<a href=\"https://www.google.com/\">");
 	    		out.println(no);
+	    		out.println("                	</a>");
 	    		out.println("                </td>");
 	    		out.println("                <td>");
+	    		out.println("                	<font size = \"4\">");
 	    		out.println(shopname);
+	    		out.println("                	</font>");
 	    		out.println("                <div>");
 	    		out.println(comments);
 	    		out.println("                </div>");
@@ -136,6 +160,11 @@ public class Omorimap extends HttpServlet {
 	    		out.println("                <div>");
 	    		out.println(ip);
 	    		out.println("                </div>");
+	    		out.println("                </td>");
+	    		out.println("                <td class=\"dlt\">");
+	    		out.println("	            	<a onClick=\"btndlt()\">");
+	    		out.println("                	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\">");
+	    		out.println("                	<a>");
 	    		out.println("                </td>");
 	    		out.println("            </tr>");
 	    	}
