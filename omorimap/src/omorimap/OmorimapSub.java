@@ -46,6 +46,10 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		p.shopname {");
 		out.println("			text-align:center;");
 		out.println("		}");
+		out.println("		p.errmsg {");
+		out.println("			text-align:center;");
+		out.println("			color:#ff0000;");
+		out.println("		}");
 		out.println("		textarea.comments{");
 		out.println("			width:300px;");
 		out.println("			height:100px;");
@@ -79,19 +83,41 @@ public class OmorimapSub extends HttpServlet {
 		out.println("	<p class=\"title\">");
 		out.println("		新規投稿＆編集画面");
 		out.println("	</p>");
+
+		String errMsg = (String)request.getAttribute("errMsg");
+		if(!(errMsg == null)) {
+			out.println("		<p class=\"errmsg\">");
+			out.println(		errMsg);
+			out.println("		</p>");
+		}
+
 		out.println("	<form name=\"form1\" action=\"/omorimap/EntryServlet\" method=\"post\">");
 		out.println("		<p class=\"shopname\">");
 		out.println("			店舗名");
 		out.println("			&nbsp;");
-		out.println("			<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\">");
+		out.println("			<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\" value=\"");
+
+		String shopname = (String)request.getAttribute("shopname");
+		if(!(shopname == null)) {
+			out.println(shopname);
+		}
+
+		out.println("\">");
 		out.println("		</p>");
+
 		out.println("		<div class=\"cmntouter\">");
 		out.println("				<span class=\"cmntinner\">");
 		out.println("					コメント");
 		out.println("				</span>");
 		out.println("				<span class=\"cmntinner\">");
 		out.println("					<textarea name=\"comments\" class=\"comments\" maxlength=\"100\">");
-		out.println("					</textarea>");
+
+		String comments = (String)request.getAttribute("comments");
+		if(!(comments == null)) {
+			out.println(comments);
+		}
+
+		out.println("</textarea>");
 		out.println("				</span>");
 		out.println("		</div>");
 		out.println("		<div class=\"button\">");

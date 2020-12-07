@@ -3,6 +3,7 @@ package omorimap;
 import java.io.IOException;
 import java.sql.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,33 +40,47 @@ public class EntryServlet extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 
-		//OmorimapSubから受け取ったデータをDTOに登録
-		DTO objDto = new DTO();
+		//URL用の変数
+		String disp = "";
 
-		//requestにてshopnameを取得
+		//requestパラメータを取得
 		String shopname = request.getParameter("shopname");
-		//requestにてcommentsを取得
 		String comments = request.getParameter("comments");
+
+		//requestパラメータをチェック
+		String errMsg = "";
+		if(shopname == null || "".equals(shopname.trim())) {
+			errMsg += "店名を入力して下さい。<br>";
+		}
+		if(comments == null || "".equals(comments.trim())) {
+			errMsg += "コメントを入力して下さい。<br>";
+		}
+
+		//入力不備がないかエラーチェック
+		if(errMsg != "") {
+			request.setAttribute("shopname",shopname);
+			request.setAttribute("comments",comments);
+			request.setAttribute("errMsg",errMsg);
+			//OmorimapSubに画面遷移
+			disp = "/omorimap/OmorimapSub";
+			RequestDispatcher dispatch = request.getRequestDispatcher(disp);
+	        dispatch.forward(request, response);
+		}
+		//エラーメッセージ無し
+		else
+		{
 		//現在日時を取得
 		Date dt = NowTime.nowSqlTime();
         //requestにてホストのIPアドレスを取得
 		String ip = GetIp.getClientIp(request);
 
-		//objDto.setNo(Integer.parseInt(request.getParameter("no")));
-		objDto.setShopname(shopname);
-		objDto.setComments(comments);
-		objDto.setDt(dt);
-		objDto.setIp(ip);
-
 		//上記の値をDBに更新
-		ConDb.UpdateDb(objDto.getShopname(),objDto.getComments(),objDto.getDt(),objDto.getIp());
-//		ConDb.UpdateDb(shopname,comments,dt,ip);
+		ConDb.UpdateDb(shopname,comments,dt,ip);
 
 		//Omorimapに画面遷移
-		String disp = "/omorimap/Omorimap";
-		//RequestDispatcher dispatch = request.getRequestDispatcher(disp);
+		disp = "/omorimap/Omorimap";
 		response.sendRedirect(disp);
-
+		}
 	}
 
 }
