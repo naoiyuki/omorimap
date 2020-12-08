@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class OmorimapSub
  */
-@WebServlet("/OmorimapSub")
+//@WebServlet("/OmorimapSub")
 public class OmorimapSub extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -97,7 +96,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("			&nbsp;");
 		out.println("			<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\" value=\"");
 
-		String shopname = (String)request.getAttribute("shopname");
+		String shopname =  request.getParameter("shopname");
 		if(!(shopname == null)) {
 			out.println(shopname);
 		}
@@ -112,7 +111,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("				<span class=\"cmntinner\">");
 		out.println("					<textarea name=\"comments\" class=\"comments\" maxlength=\"100\">");
 
-		String comments = (String)request.getAttribute("comments");
+		String comments =  request.getParameter("comments");
 		if(!(comments == null)) {
 			out.println(comments);
 		}

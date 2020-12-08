@@ -19,4 +19,24 @@
     <servlet-name>Omorimap</servlet-name>
     <url-pattern>/Omorimap</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>omorimapsub</display-name>
+    <servlet-name>omorimapsub</servlet-name>
+    <servlet-class>omorimap.OmorimapSub</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>omorimapsub</servlet-name>
+    <url-pattern>/OmorimapSub</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>entryservlet</display-name>
+    <servlet-name>entryservlet</servlet-name>
+    <servlet-class>omorimap.EntryServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>entryservlet</servlet-name>
+    <url-pattern>/EntryServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

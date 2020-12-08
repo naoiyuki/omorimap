@@ -5,7 +5,6 @@ import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class EntryServlet
  */
-@WebServlet("/EntryServlet")
+//@WebServlet("/EntryServlet")
 public class EntryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +49,7 @@ public class EntryServlet extends HttpServlet {
 		//requestパラメータをチェック
 		String errMsg = "";
 		if(shopname == null || "".equals(shopname.trim())) {
-			errMsg += "店名を入力して下さい。<br>";
+			errMsg += "店舗名を入力して下さい。<br>";
 		}
 		if(comments == null || "".equals(comments.trim())) {
 			errMsg += "コメントを入力して下さい。<br>";
@@ -58,11 +57,11 @@ public class EntryServlet extends HttpServlet {
 
 		//入力不備がないかエラーチェック
 		if(errMsg != "") {
-			request.setAttribute("shopname",shopname);
-			request.setAttribute("comments",comments);
+//			request.setAttribute("shopname",shopname);
+//			request.setAttribute("comments",comments);
 			request.setAttribute("errMsg",errMsg);
 			//OmorimapSubに画面遷移
-			disp = "/omorimap/OmorimapSub";
+			disp = "/OmorimapSub";
 			RequestDispatcher dispatch = request.getRequestDispatcher(disp);
 	        dispatch.forward(request, response);
 		}
