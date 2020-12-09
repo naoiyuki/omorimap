@@ -107,18 +107,7 @@ public class Omorimap extends HttpServlet {
 		out.println("                </th>");
 		out.println("            </tr>");
 
-//		Connection conn = null;
-//	    String url = "jdbc:mysql://localhost/mysql?serverTimezone=JST";
-//	    String user = "root";
-//	    String password = "naoi";
-
 	    try {
-//			Class.forName("com.mysql.jdbc.Driver").newInstance();
-//	  		conn = DriverManager.getConnection(url, user, password);
-//	     	Statement stmt = conn.createStatement();
-//	      	String sql = "SELECT * FROM list";
-//	      	ResultSet rs = stmt.executeQuery(sql);
-
 	    	// DAOオブジェクト化
 	    	//全レコードを取得
 	    	ConDb objCndb = new ConDb();
@@ -127,12 +116,6 @@ public class Omorimap extends HttpServlet {
 	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
 	    		DTO Dto = list.get(i);
-
-//	    		int no = rs.getInt("no");
-//	    		String shopname = rs.getString("shopname");
-//	    		String comments = rs.getString("comments");
-//	    		Date dt = rs.getDate("dt");
-//	    		String ip = rs.getString("ip");
 
 	    		//レコードの各カラムの値を取得
 	    		int no = Dto.getNo();
@@ -170,27 +153,9 @@ public class Omorimap extends HttpServlet {
 	    	}
 
 	    }
-//	    catch (SQLException e){
-//	      out.println("SQLException:" + e.getMessage());
-//	    }
 	    catch (Exception e){
 	      out.println("Exception:" + e.getMessage());
 	    }
-//	    finally{
-//	      try{
-//	        if (conn != null){
-//	          conn.close();
-//
-//	        }else{
-//	          out.println("コネクションがありません");
-//	        }
-//	      }catch (SQLException e){
-//	        out.println("SQLException:" + e.getMessage());
-//	      }
-//	    }
-
-
-
 
 		out.println("        </table>");
 		out.println("");

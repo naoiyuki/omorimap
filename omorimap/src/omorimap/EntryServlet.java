@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class EntryServlet
  */
-//@WebServlet("/EntryServlet")
 public class EntryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -57,8 +56,6 @@ public class EntryServlet extends HttpServlet {
 
 		//入力不備がないかエラーチェック
 		if(errMsg != "") {
-//			request.setAttribute("shopname",shopname);
-//			request.setAttribute("comments",comments);
 			request.setAttribute("errMsg",errMsg);
 			//OmorimapSubに画面遷移
 			disp = "/OmorimapSub";
