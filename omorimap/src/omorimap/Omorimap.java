@@ -69,11 +69,8 @@ public class Omorimap extends HttpServlet {
 		out.println("	<script>");
 		out.println("		function btndlt(){");
 		out.println(" 		 	ret = confirm(\"この行の情報を削除します。よろしいですか？\");");
-		out.println("  			if (ret == true){");
-		out.println("		  		location.href = \"http://www.google.co.jp/\";");
-		out.println("  			}");
-		out.println("  			else {");
-		out.println("  				location.href = \"https://www.bing.com/\";");
+		out.println("  			if (ret == false) {");
+		out.println("  				return false;");
 		out.println("  			}");
 		out.println("		}");
 		out.println("	</script>");
@@ -126,9 +123,9 @@ public class Omorimap extends HttpServlet {
 
 	    		out.println("            <tr>");
 	    		out.println("                <td class=\"num\">");
-	    		out.println("                	<a href=\"https://www.google.com/\">");
-	    		out.println(no);
-	    		out.println("                	</a>");
+	    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
+	    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + no + "\">");
+	    		out.println("                	</form>");
 	    		out.println("                </td>");
 	    		out.println("                <td>");
 	    		out.println("                	<font size = \"4\">");
@@ -145,9 +142,10 @@ public class Omorimap extends HttpServlet {
 	    		out.println("                </div>");
 	    		out.println("                </td>");
 	    		out.println("                <td class=\"dlt\">");
-	    		out.println("	            	<a onClick=\"btndlt()\">");
-	    		out.println("                	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\">");
-	    		out.println("                	<a>");
+	    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\" onsubmit = \"return btndlt();\">");
+	    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + no + "\">");
+	    		out.println("		            	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\" >");
+	    		out.println("	                </form>");
 	    		out.println("                </td>");
 	    		out.println("            </tr>");
 	    	}

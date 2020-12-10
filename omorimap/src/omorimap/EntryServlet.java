@@ -45,37 +45,40 @@ public class EntryServlet extends HttpServlet {
 		String shopname = request.getParameter("shopname");
 		String comments = request.getParameter("comments");
 
-		//requestパラメータをチェック
-		String errMsg = "";
-		if(shopname == null || "".equals(shopname.trim())) {
-			errMsg += "店舗名を入力して下さい。<br>";
-		}
-		if(comments == null || "".equals(comments.trim())) {
-			errMsg += "コメントを入力して下さい。<br>";
-		}
-
-		//入力不備がないかエラーチェック
-		if(errMsg != "") {
-			request.setAttribute("errMsg",errMsg);
-			//OmorimapSubに画面遷移
-			disp = "/OmorimapSub";
-			RequestDispatcher dispatch = request.getRequestDispatcher(disp);
-	        dispatch.forward(request, response);
-		}
-		//エラーメッセージ無し
-		else
-		{
-		//現在日時を取得
-		Date dt = NowTime.nowSqlTime();
-        //requestにてホストのIPアドレスを取得
-		String ip = GetIp.getClientIp(request);
-
-		//上記の値をDBに更新
-		ConDb.UpdateDb(shopname,comments,dt,ip);
-
-		//Omorimapに画面遷移
-		disp = "/omorimap/Omorimap";
-		response.sendRedirect(disp);
+		//OmorimapSubの登録処理
+		if(shopname != null && comments != null) {
+			//requestパラメータをチェック
+			String errMsg = "";
+			if(shopname == null || "".equals(shopname.trim())) {
+				errMsg += "店舗名を入力して下さい。<br>";
+			}
+			if(comments == null || "".equals(comments.trim())) {
+				errMsg += "コメントを入力して下さい。<br>";
+			}
+	
+			//入力不備がないかエラーチェック
+			if(errMsg != "") {
+				request.setAttribute("errMsg",errMsg);
+				//OmorimapSubに画面遷移
+				disp = "/OmorimapSub";
+				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
+		        dispatch.forward(request, response);
+			}
+			//エラーメッセージ無し
+			else
+			{
+			//現在日時を取得
+			Date dt = NowTime.nowSqlTime();
+	        //requestにてホストのIPアドレスを取得
+			String ip = GetIp.getClientIp(request);
+	
+			//上記の値をDBに更新
+			ConDb.UpdateDb(shopname,comments,dt,ip);
+	
+			//Omorimapに画面遷移
+			disp = "/omorimap/Omorimap";
+			response.sendRedirect(disp);
+			}
 		}
 	}
 
