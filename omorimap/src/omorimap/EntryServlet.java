@@ -74,7 +74,7 @@ public class EntryServlet extends HttpServlet {
 			else
 			{
 			//上記の値をDBに更新
-			ConDb.updateDb(strShopname,strComments,dt,ip);
+			DAO.updateDb(strShopname,strComments,dt,ip);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
@@ -85,7 +85,7 @@ public class EntryServlet extends HttpServlet {
 		//OmorimapのDBへの削除処理
 		if(strDltnum != null) {
 			int intDltnum = Integer.parseInt(strDltnum);
-			ConDb.deleteDb(intDltnum);
+			DAO.deleteDb(intDltnum);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
