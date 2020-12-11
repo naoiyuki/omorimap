@@ -106,9 +106,9 @@ public class Omorimap extends HttpServlet {
 
 	    try {
 	    	// DAOオブジェクト化
-	    	//全レコードを取得
-	    	ConDb objCndb = new ConDb();
-	    	list = objCndb.selectAllDb();
+	    	//全カラムを取得
+	    	DAO objDao = new DAO();
+	    	list = objDao.selectAllDb();
 
 	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
