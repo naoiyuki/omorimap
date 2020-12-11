@@ -19,6 +19,7 @@ public class ConDb {
 	private static final String PASSWD="naoi";
 
 
+	//DBに接続するためのメソッド
 	public static Connection createConnection(){
 		Connection conn = null;
 
@@ -37,6 +38,7 @@ public class ConDb {
 	    return conn;
 	}
 
+	//DBの接続を閉じるためのメソッド
 	public static void disConnection(Connection conn) {
 		try{
             conn.close();
@@ -45,7 +47,7 @@ public class ConDb {
         }
 	}
 
-	// DBのテーブルに登録された全てのデータをArrayList<SampleDTO>型オブジェクトへ格納し、戻り値として返す
+	// DBのテーブルに登録された全てのデータをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
 	public static ArrayList<DTO> selectAllDb(){
 		// 変数宣言
         Connection conn = null;  // DBコネクション
@@ -96,8 +98,8 @@ public class ConDb {
 		return list;
 	}
 
-	// 受け取った値をDBに登録
-	public static void UpdateDb(String shopname,String comments,Date dt,String ip){
+	// 受け取った値をDBに追加
+	public static void updateDb(String shopname,String comments,Date dt,String ip){
 		// 変数宣言
         Connection conn = null;  // DBコネクション
         PreparedStatement pstmt = null;   // SQLステートメント
@@ -114,6 +116,7 @@ public class ConDb {
 			pstmt.setDate(3,dt);
 			pstmt.setString(4,ip);
 
+			//SQLをDBへ発行
 			pstmt.executeUpdate();
 
 			//接続などを閉じる
@@ -122,6 +125,39 @@ public class ConDb {
 
 
 		}catch(SQLException e){
+            System.out.println("Errorが発生しました！\n"+e);
+        }finally{
+            // リソースの開放
+            if(pstmt != null){
+                try{pstmt.close();}catch(SQLException ignore){}
+            }
+            if(conn != null){
+                try{conn.close();}catch(SQLException ignore){}
+            }
+        }
+	}
+
+	//受け取ったnoの値のDBのカラムを削除
+	public static void deleteDb(int no) {
+		// 変数宣言
+        Connection conn = null;  // DBコネクション
+        PreparedStatement pstmt = null;   // SQLステートメント
+
+        // SQL文作成
+        String sql = "DELETE FROM list WHERE no = \"" + no + "\"";
+
+        try {
+        	conn= createConnection();
+			pstmt = conn.prepareStatement(sql);
+
+			//SQLをDBへ発行
+			pstmt.executeUpdate();
+
+			//接続などを閉じる
+	    	pstmt.close();
+	    	disConnection(createConnection());
+
+        }catch(SQLException e){
             System.out.println("Errorが発生しました！\n"+e);
         }finally{
             // リソースの開放

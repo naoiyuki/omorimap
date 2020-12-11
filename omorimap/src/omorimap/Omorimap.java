@@ -115,35 +115,35 @@ public class Omorimap extends HttpServlet {
 	    		DTO Dto = list.get(i);
 
 	    		//レコードの各カラムの値を取得
-	    		int no = Dto.getNo();
-	    		String shopname = Dto.getShopname();
-	    		String comments = Dto.getComments();
-	    		Date dt = Dto.getDt();
-	    		String ip = Dto.getIp();
+	    		int intDtoNo = Dto.getNo();
+	    		String strDtoShopname = Dto.getShopname();
+	    		String strDtoComments = Dto.getComments();
+	    		Date dtDtoDt = Dto.getDt();
+	    		String strDtoIp = Dto.getIp();
 
 	    		out.println("            <tr>");
 	    		out.println("                <td class=\"num\">");
 	    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
-	    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + no + "\">");
+	    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + intDtoNo + "\">");
 	    		out.println("                	</form>");
 	    		out.println("                </td>");
 	    		out.println("                <td>");
 	    		out.println("                	<font size = \"4\">");
-	    		out.println(shopname);
+	    		out.println(strDtoShopname);
 	    		out.println("                	</font>");
 	    		out.println("                <div>");
-	    		out.println(comments);
+	    		out.println(strDtoComments);
 	    		out.println("                </div>");
 	    		out.println("                </td>");
 	    		out.println("                <td>");
-	    		out.println(dt);
+	    		out.println(dtDtoDt);
 	    		out.println("                <div>");
-	    		out.println(ip);
+	    		out.println(strDtoIp);
 	    		out.println("                </div>");
 	    		out.println("                </td>");
 	    		out.println("                <td class=\"dlt\">");
-	    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\" onsubmit = \"return btndlt();\">");
-	    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + no + "\">");
+	    		out.println("                	<form method=\"post\" action=\"/omorimap/EntryServlet\" onsubmit = \"return btndlt();\">");
+	    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + intDtoNo + "\">");
 	    		out.println("		            	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\" >");
 	    		out.println("	                </form>");
 	    		out.println("                </td>");

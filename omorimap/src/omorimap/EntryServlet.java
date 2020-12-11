@@ -42,23 +42,29 @@ public class EntryServlet extends HttpServlet {
 		String disp = "";
 
 		//requestパラメータを取得
-		String shopname = request.getParameter("shopname");
-		String comments = request.getParameter("comments");
+		String strShopname = request.getParameter("shopname");
+		String strComments = request.getParameter("comments");
+		String strDltnum = request.getParameter("dltnum");
+		//現在日時を取得
+		Date dt = NowTime.nowSqlTime();
+        //requestにてホストのIPアドレスを取得
+		String ip = GetIp.getClientIp(request);
 
-		//OmorimapSubの登録処理
-		if(shopname != null && comments != null) {
+		//OmorimapSubのDBへの追加処理
+		if(strShopname != null && strComments != null) {
 			//requestパラメータをチェック
 			String errMsg = "";
-			if(shopname == null || "".equals(shopname.trim())) {
+			if("".equals(strShopname.trim())) {
 				errMsg += "店舗名を入力して下さい。<br>";
 			}
-			if(comments == null || "".equals(comments.trim())) {
+			if("".equals(strComments.trim())) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
-	
+
 			//入力不備がないかエラーチェック
 			if(errMsg != "") {
 				request.setAttribute("errMsg",errMsg);
+
 				//OmorimapSubに画面遷移
 				disp = "/OmorimapSub";
 				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
@@ -67,18 +73,23 @@ public class EntryServlet extends HttpServlet {
 			//エラーメッセージ無し
 			else
 			{
-			//現在日時を取得
-			Date dt = NowTime.nowSqlTime();
-	        //requestにてホストのIPアドレスを取得
-			String ip = GetIp.getClientIp(request);
-	
 			//上記の値をDBに更新
-			ConDb.UpdateDb(shopname,comments,dt,ip);
-	
+			ConDb.updateDb(strShopname,strComments,dt,ip);
+
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
 			response.sendRedirect(disp);
 			}
+		}
+
+		//OmorimapのDBへの削除処理
+		if(strDltnum != null) {
+			int intDltnum = Integer.parseInt(strDltnum);
+			ConDb.deleteDb(intDltnum);
+
+			//Omorimapに画面遷移
+			disp = "/omorimap/Omorimap";
+			response.sendRedirect(disp);
 		}
 	}
 

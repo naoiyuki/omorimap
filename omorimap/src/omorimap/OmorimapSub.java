@@ -82,6 +82,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		新規投稿＆編集画面");
 		out.println("	</p>");
 
+		//OmorimapSubの全項目に記入がされなかった時のエラー表示用の変数
 		String errMsg = (String)request.getAttribute("errMsg");
 		if(!(errMsg == null)) {
 			out.println("		<p class=\"errmsg\">");
@@ -95,6 +96,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("			&nbsp;");
 		out.println("			<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\" value=\"");
 
+		//OmorimapSubの全項目に記入されなかった場合に店舗名を返す
 		String shopname =  request.getParameter("shopname");
 		if(!(shopname == null)) {
 			out.println(shopname);
@@ -110,6 +112,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("				<span class=\"cmntinner\">");
 		out.println("					<textarea name=\"comments\" class=\"comments\" maxlength=\"100\">");
 
+		//OmorimapSubの全項目に記入されなかった場合にコメントを返す
 		String comments =  request.getParameter("comments");
 		if(!(comments == null)) {
 			out.println(comments);
