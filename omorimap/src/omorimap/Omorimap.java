@@ -106,15 +106,20 @@ public class Omorimap extends HttpServlet {
 
 	    try {
 	    	// DAOオブジェクト化
-	    	//全カラムを取得
+	    	//全レコードを取得
 	    	DAO objDao = new DAO();
-	    	list = objDao.selectAllDb();
+	    	if(list != null) {
+	    		list = objDao.getList();
+	    	}else {
+	    		list = objDao.selectAllDb();
+	    	}
 
 	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
 	    		DTO Dto = list.get(i);
 
-	    		//レコードの各カラムの値を取得
+	    		//レコードの各パラメーターを取得
+	    		int intDtoId = Dto.getId();
 	    		int intDtoNo = Dto.getNo();
 	    		String strDtoShopname = Dto.getShopname();
 	    		String strDtoComments = Dto.getComments();

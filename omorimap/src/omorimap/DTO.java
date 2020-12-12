@@ -3,11 +3,19 @@ package omorimap;
 import java.sql.Date;
 
 public class DTO {
-	private int no;				//番号
+	private int no;				//一覧表の番号
 	private String shopname;	//ショップ名
 	private String comments;	//コメント
 	private Date dt;			//登録日時
 	private String ip;			//登録IP
+
+	private int id;				//レコードのインデックス
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 
 	public int getNo() {
 		return no;

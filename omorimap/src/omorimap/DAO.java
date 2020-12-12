@@ -10,12 +10,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DAO {
-	//接続用の情報をフィールドに定数として定義
+		//接続用の情報をフィールドに定数として定義
 		private static final String RDB_DRIVE="com.mysql.jdbc.Driver";
 		private static final String URL="jdbc:mysql://localhost/mysql?serverTimezone=JST";
 		private static final String USER="root";
 		private static final String PASSWD="naoi";
 
+		//DTOを格納するArrayListの作成
+		private static ArrayList<DTO> list = new ArrayList<DTO>();
+		//既にDBから取得済みのlistのgetter
+		public static ArrayList<DTO> getList() {
+			return list;
+		}
 
 		//DBに接続するためのメソッド
 		public static Connection createConnection(){
@@ -46,19 +52,18 @@ public class DAO {
 		}
 
 		// DBのテーブルに登録された全てのデータをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
-		public static ArrayList<DTO> selectAllDb(){
-			// 変数宣言
+		public ArrayList<DTO> selectAllDb(){
+			//変数宣言
 	        Connection conn = null;  // DBコネクション
 	        Statement stmt = null;   // SQLステートメント
 
-	        // 配列宣言
-	        ArrayList<DTO> list = new ArrayList<DTO>();
+
 
 	        // SQL文作成
 	        String sql = "SELECT * FROM list";
 
 			try {
-				conn= createConnection();
+				conn= DAO.createConnection();
 				stmt = conn.createStatement();
 
 				// SQL文発行
@@ -67,18 +72,20 @@ public class DAO {
 		    	// 検索結果をArrayListに格納
 		    	while(rs.next()) {
 		    		DTO objDto = new DTO();
+		    		objDto.setId(rs.getInt("id"));
 		    		objDto.setNo(rs.getInt("no"));
 		    		objDto.setShopname(rs.getString("shopname"));
 		    		objDto.setComments(rs.getString("comments"));
 		    		objDto.setDt(rs.getDate("dt"));
 		    		objDto.setIp(rs.getString("ip"));
+
 		    		list.add(objDto);
 		    	}
 
 		    	//接続などを閉じる
 		    	rs.close();
 		    	stmt.close();
-		    	disConnection(createConnection());
+		    	DAO.disConnection(createConnection());
 
 
 			}catch(SQLException e){
@@ -96,8 +103,8 @@ public class DAO {
 			return list;
 		}
 
-		//カラムをDBに追加
-		public static void updateDb(String shopname,String comments,Date dt,String ip){
+		//レコードをDBに追加
+		public static void insertDb(String shopname,String comments,Date dt,String ip){
 			// 変数宣言
 	        Connection conn = null;  // DBコネクション
 	        PreparedStatement pstmt = null;   // SQLステートメント
@@ -106,7 +113,7 @@ public class DAO {
 	        String sql = "INSERT INTO list (shopname,comments,dt,ip) VALUES (?,?,?,?)";
 
 			try {
-				conn= createConnection();
+				conn= DAO.createConnection();
 				pstmt = conn.prepareStatement(sql);
 
 				pstmt.setString(1,shopname);
@@ -119,7 +126,7 @@ public class DAO {
 
 				//接続などを閉じる
 		    	pstmt.close();
-		    	disConnection(createConnection());
+		    	DAO.disConnection(createConnection());
 
 
 			}catch(SQLException e){
@@ -135,7 +142,7 @@ public class DAO {
 	        }
 		}
 
-		//カラムをDBから削除
+		//レコードをDBから削除
 		public static void deleteDb(int no) {
 			// 変数宣言
 	        Connection conn = null;  // DBコネクション
@@ -145,7 +152,7 @@ public class DAO {
 	        String sql = "DELETE FROM list WHERE no = \"" + no + "\"";
 
 	        try {
-	        	conn= createConnection();
+	        	conn= DAO.createConnection();
 				pstmt = conn.prepareStatement(sql);
 
 				//SQLをDBへ発行
@@ -153,7 +160,7 @@ public class DAO {
 
 				//接続などを閉じる
 		    	pstmt.close();
-		    	disConnection(createConnection());
+		    	DAO.disConnection(createConnection());
 
 	        }catch(SQLException e){
 	            System.out.println("Errorが発生しました！\n"+e);
@@ -166,6 +173,37 @@ public class DAO {
 	                try{conn.close();}catch(SQLException ignore){}
 	            }
 	        }
+		}
+
+		//一覧表からレコードを削除するためのメソッド
+		//該当するレコードのnoの値を0に変更し更新
+		public static void deleteDtoRcd(int dltnum) {
+			// 変数宣言
+	        Connection conn = null;  // DBコネクション
+	        PreparedStatement pstmt = null;   // SQLステートメント
+	        int intNo = 1;	//一覧表のNo 1で初期化
+
+	        //一覧表から削除するレコードを取得
+	        DTO DltnumDto = list.get(dltnum);
+	        //一覧表から削除するDTOのnoを0に変更し、listを書き換え
+	        DltnumDto.setNo(0);
+	        list.set(dltnum, DltnumDto);
+
+
+	        //DTO,DBのlistテーブルの各レコードのnoが0を飛ばして連番にする処理
+	        for(int i = 0;i < list.size();i++){
+	        	DTO Dto = list.get(i);
+
+	        	if(Dto.getNo() != 0) {
+	        		//list DTO noが連番にする処理
+	        		Dto.setNo(intNo);
+	        		intNo++;
+
+
+	        	}
+	        }
+
+
 		}
 
 

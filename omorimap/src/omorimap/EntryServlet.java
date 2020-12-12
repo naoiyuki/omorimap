@@ -74,7 +74,7 @@ public class EntryServlet extends HttpServlet {
 			else
 			{
 			//上記の値をDBに更新
-			DAO.updateDb(strShopname,strComments,dt,ip);
+			DAO.insertDb(strShopname,strComments,dt,ip);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
