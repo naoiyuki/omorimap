@@ -24,7 +24,7 @@ public class Omorimap extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-    // 配列宣言
+    // 変数宣言
     // SampleDTO型のオブジェクトを格納するArrayList
     private ArrayList<DTO> list = null;
     //現在時刻の取得
@@ -108,18 +108,15 @@ public class Omorimap extends HttpServlet {
 	    	// DAOオブジェクト化
 	    	//全レコードを取得
 	    	DAO objDao = new DAO();
-	    	if(list != null) {
-	    		list = objDao.getList();
-	    	}else {
-	    		list = objDao.selectAllDb();
-	    	}
+	    	list = objDao.selectAllRcd();
+
 
 	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
 	    		DTO Dto = list.get(i);
 
 	    		//レコードの各パラメーターを取得
-	    		int intDtoId = Dto.getId();
+	    		//int intDtoId = Dto.getId();
 	    		int intDtoNo = Dto.getNo();
 	    		String strDtoShopname = Dto.getShopname();
 	    		String strDtoComments = Dto.getComments();

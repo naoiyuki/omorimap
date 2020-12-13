@@ -15,18 +15,22 @@ public class DAO {
 		private static final String URL="jdbc:mysql://localhost/mysql?serverTimezone=JST";
 		private static final String USER="root";
 		private static final String PASSWD="naoi";
+		
 
-		//DTOを格納するArrayListの作成
-		private static ArrayList<DTO> list = new ArrayList<DTO>();
-		//既にDBから取得済みのlistのgetter
-		public static ArrayList<DTO> getList() {
-			return list;
-		}
+//		//接続用の情報を初期化
+//        private static Connection conn = null;
+//        private static Statement stmt = null;
+//        private static PreparedStatement pstmt = null;
+//        private static ResultSet rs = null;
+
+//		//DTOを格納するArrayListの作成
+//		private ArrayList<DTO> list = new ArrayList<DTO>();
+
 
 		//DBに接続するためのメソッド
 		public static Connection createConnection(){
 			Connection conn = null;
-
+			
 		  //DB接続開始
 		    try {
 		    	//ドライバクラスをロード
@@ -44,21 +48,20 @@ public class DAO {
 
 		//DBの接続を閉じるためのメソッド
 		public static void disConnection(Connection conn) {
-			try{
+			try {
 	            conn.close();
 	            } catch (Exception ex){
 	            ex.printStackTrace();
 	        }
 		}
 
-		// DBのテーブルに登録された全てのデータをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
-		public ArrayList<DTO> selectAllDb(){
-			//変数宣言
-	        Connection conn = null;  // DBコネクション
-	        Statement stmt = null;   // SQLステートメント
-
-
-
+		// DBのテーブルに登録された全てのレコードをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
+		public ArrayList<DTO> selectAllRcd(){
+			Connection conn = null; 
+			Statement stmt = null;
+			ResultSet rs = null;
+			ArrayList<DTO> list = new ArrayList<DTO>();
+			
 	        // SQL文作成
 	        String sql = "SELECT * FROM list";
 
@@ -67,7 +70,7 @@ public class DAO {
 				stmt = conn.createStatement();
 
 				// SQL文発行
-		    	ResultSet rs = stmt.executeQuery(sql);
+		    	rs = stmt.executeQuery(sql);
 
 		    	// 検索結果をArrayListに格納
 		    	while(rs.next()) {
@@ -81,13 +84,10 @@ public class DAO {
 
 		    		list.add(objDto);
 		    	}
-
 		    	//接続などを閉じる
 		    	rs.close();
 		    	stmt.close();
-		    	DAO.disConnection(createConnection());
-
-
+		    	DAO.disConnection(conn);
 			}catch(SQLException e){
 	            System.out.println("Errorが発生しました！\n"+e);
 	        }finally{
@@ -99,15 +99,13 @@ public class DAO {
 	                try{conn.close();}catch(SQLException ignore){}
 	            }
 	        }
-
 			return list;
 		}
 
 		//レコードをDBに追加
-		public static void insertDb(String shopname,String comments,Date dt,String ip){
-			// 変数宣言
-	        Connection conn = null;  // DBコネクション
-	        PreparedStatement pstmt = null;   // SQLステートメント
+		public static void insertRcd(String shopname,String comments,Date dt,String ip){
+	        Connection conn = null;
+	        PreparedStatement pstmt = null;
 
 	        // SQL文作成
 	        String sql = "INSERT INTO list (shopname,comments,dt,ip) VALUES (?,?,?,?)";
@@ -126,7 +124,7 @@ public class DAO {
 
 				//接続などを閉じる
 		    	pstmt.close();
-		    	DAO.disConnection(createConnection());
+		    	DAO.disConnection(conn);
 
 
 			}catch(SQLException e){
@@ -142,45 +140,46 @@ public class DAO {
 	        }
 		}
 
-		//レコードをDBから削除
-		public static void deleteDb(int no) {
-			// 変数宣言
-	        Connection conn = null;  // DBコネクション
-	        PreparedStatement pstmt = null;   // SQLステートメント
-
-	        // SQL文作成
-	        String sql = "DELETE FROM list WHERE no = \"" + no + "\"";
-
-	        try {
-	        	conn= DAO.createConnection();
-				pstmt = conn.prepareStatement(sql);
-
-				//SQLをDBへ発行
-				pstmt.executeUpdate();
-
-				//接続などを閉じる
-		    	pstmt.close();
-		    	DAO.disConnection(createConnection());
-
-	        }catch(SQLException e){
-	            System.out.println("Errorが発生しました！\n"+e);
-	        }finally{
-	            // リソースの開放
-	            if(pstmt != null){
-	                try{pstmt.close();}catch(SQLException ignore){}
-	            }
-	            if(conn != null){
-	                try{conn.close();}catch(SQLException ignore){}
-	            }
-	        }
-		}
+//		//レコードをDBから削除
+//		public static void deleteDb(int no) {
+//			// 変数宣言
+//	        Connection conn = null;  // DBコネクション
+//	        PreparedStatement pstmt = null;   // SQLステートメント
+//
+//	        // SQL文作成
+//	        String sql = "DELETE FROM list WHERE no = \"" + no + "\"";
+//
+//	        try {
+//	        	conn= DAO.createConnection();
+//				pstmt = conn.prepareStatement(sql);
+//
+//				//SQLをDBへ発行
+//				pstmt.executeUpdate();
+//
+//				//接続などを閉じる
+//		    	pstmt.close();
+//		    	DAO.disConnection(conn);
+//
+//	        }catch(SQLException e){
+//	            System.out.println("Errorが発生しました！\n"+e);
+//	        }finally{
+//	            // リソースの開放
+//	            if(pstmt != null){
+//	                try{pstmt.close();}catch(SQLException ignore){}
+//	            }
+//	            if(conn != null){
+//	                try{conn.close();}catch(SQLException ignore){}
+//	            }
+//	        }
+//		}
 
 		//一覧表からレコードを削除するためのメソッド
-		//該当するレコードのnoの値を0に変更し更新
+		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるよう更新
 		public static void deleteDtoRcd(int dltnum) {
 			// 変数宣言
-	        Connection conn = null;  // DBコネクション
-	        PreparedStatement pstmt = null;   // SQLステートメント
+	        Connection conn = null;
+	        PreparedStatement pstmt = null;
+	        ArrayList<DTO> list = new ArrayList<DTO>();
 	        int intNo = 1;	//一覧表のNo 1で初期化
 
 	        //一覧表から削除するレコードを取得
