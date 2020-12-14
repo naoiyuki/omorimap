@@ -42,6 +42,7 @@ public class EntryServlet extends HttpServlet {
 		String disp = "";
 
 		//requestパラメータを取得
+		int intNo = ListDTO.getList().size() + 1;
 		String strShopname = request.getParameter("shopname");
 		String strComments = request.getParameter("comments");
 		String strDltnum = request.getParameter("dltnum");
@@ -74,7 +75,7 @@ public class EntryServlet extends HttpServlet {
 			else
 			{
 			//上記の値をDBに更新
-			DAO.insertRcd(strShopname,strComments,dt,ip);
+			DAO.insertRcd(intNo,strShopname,strComments,dt,ip);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
@@ -85,7 +86,7 @@ public class EntryServlet extends HttpServlet {
 		//OmorimapのDBへの削除処理
 		if(strDltnum != null) {
 			int intDltnum = Integer.parseInt(strDltnum);
-			DAO.deleteDb(intDltnum);
+			DAO.deleteDtoRcd(intDltnum);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";

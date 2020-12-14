@@ -15,7 +15,7 @@ public class DAO {
 		private static final String URL="jdbc:mysql://localhost/mysql?serverTimezone=JST";
 		private static final String USER="root";
 		private static final String PASSWD="naoi";
-		
+
 
 //		//接続用の情報を初期化
 //        private static Connection conn = null;
@@ -30,7 +30,7 @@ public class DAO {
 		//DBに接続するためのメソッド
 		public static Connection createConnection(){
 			Connection conn = null;
-			
+
 		  //DB接続開始
 		    try {
 		    	//ドライバクラスをロード
@@ -57,11 +57,12 @@ public class DAO {
 
 		// DBのテーブルに登録された全てのレコードをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
 		public ArrayList<DTO> selectAllRcd(){
-			Connection conn = null; 
+			Connection conn = null;
 			Statement stmt = null;
 			ResultSet rs = null;
 			ArrayList<DTO> list = new ArrayList<DTO>();
-			
+			ListDTO.setList(null);
+
 	        // SQL文作成
 	        String sql = "SELECT * FROM list";
 
@@ -99,25 +100,31 @@ public class DAO {
 	                try{conn.close();}catch(SQLException ignore){}
 	            }
 	        }
+
+			//ListDTOにデータを登録
+			ListDTO.setList(list);
+
 			return list;
 		}
 
 		//レコードをDBに追加
-		public static void insertRcd(String shopname,String comments,Date dt,String ip){
+		public static void insertRcd(int no,String shopname,String comments,Date dt,String ip){
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
 
 	        // SQL文作成
-	        String sql = "INSERT INTO list (shopname,comments,dt,ip) VALUES (?,?,?,?)";
+	        String sql = "INSERT INTO list (no,shopname,comments,dt,ip) VALUES (?,?,?,?,?)";
 
 			try {
 				conn= DAO.createConnection();
 				pstmt = conn.prepareStatement(sql);
 
-				pstmt.setString(1,shopname);
-				pstmt.setString(2,comments);
-				pstmt.setDate(3,dt);
-				pstmt.setString(4,ip);
+
+				pstmt.setInt(1, no);
+				pstmt.setString(2,shopname);
+				pstmt.setString(3,comments);
+				pstmt.setDate(4,dt);
+				pstmt.setString(5,ip);
 
 				//SQLをDBへ発行
 				pstmt.executeUpdate();
@@ -125,7 +132,6 @@ public class DAO {
 				//接続などを閉じる
 		    	pstmt.close();
 		    	DAO.disConnection(conn);
-
 
 			}catch(SQLException e){
 	            System.out.println("Errorが発生しました！\n"+e);
@@ -173,37 +179,70 @@ public class DAO {
 //	        }
 //		}
 
-		//一覧表からレコードを削除するためのメソッド
+		//一覧表のレコードを表示させなくするためのメソッド
 		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるよう更新
 		public static void deleteDtoRcd(int dltnum) {
 			// 変数宣言
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
-	        ArrayList<DTO> list = new ArrayList<DTO>();
-	        int intNo = 1;	//一覧表のNo 1で初期化
+	        ArrayList<DTO> list = ListDTO.getList();
+	        int intNo = 0;	//一覧表のNoを1で初期化
+	        int setDltnum = dltnum - 1;	//一覧表のNoとリストのインデクスを合わせる
+	        String sql = "UPDATE list SET `no` = \"?\" WHERE `id` = ?";
 
 	        //一覧表から削除するレコードを取得
-	        DTO DltnumDto = list.get(dltnum);
+	        DTO DltnumDto = list.get(setDltnum);
 	        //一覧表から削除するDTOのnoを0に変更し、listを書き換え
 	        DltnumDto.setNo(0);
-	        list.set(dltnum, DltnumDto);
+	        list.set(setDltnum, DltnumDto);
 
+	        try {
+		        conn = DAO.createConnection();
+		        pstmt = conn.prepareStatement(sql);
+		        conn.setAutoCommit(false);
 
-	        //DTO,DBのlistテーブルの各レコードのnoが0を飛ばして連番にする処理
-	        for(int i = 0;i < list.size();i++){
-	        	DTO Dto = list.get(i);
+		        try {
+			        //DTO,DBのlistテーブルの各レコードのnoが0を飛ばして連番にする処理
+			        for(int i = 0;i < list.size();i++){
+			        	DTO Dto = list.get(i);
 
-	        	if(Dto.getNo() != 0) {
-	        		//list DTO noが連番にする処理
-	        		Dto.setNo(intNo);
-	        		intNo++;
+			        	if(Dto.getNo() == 0) {
+			        		//list DTO noが連番にする処理
+			        		Dto.setNo(0);
+			        		pstmt.setInt(1, 0);
+			        		pstmt.setInt(2, i + 1);
+			        		pstmt.addBatch();
+			        	} else if(Dto.getNo() > 0) {
+			        		intNo++;
+			        		Dto.setNo(intNo);
+			        		pstmt.setInt(1, intNo);
+			        		pstmt.setInt(2, i + 1);
+			        		pstmt.addBatch();
+			        	} else {
+			        		throw new Exception("Noが範囲外です。");
+			        	}
+			        }
 
+			        pstmt.executeBatch();
+		        	conn.commit();
 
-	        	}
+		        }catch (Exception e) {
+	                conn.rollback();
+	                System.out.println("rollback");
+	                throw e;
+	            }
+	        }catch(SQLException e){
+	            System.out.println("Errorが発生しました！\n"+e);
+	        }catch(Exception e){
+	            e.printStackTrace();//throwの後ここに処理が移る
+	        }finally{
+	            // リソースの開放
+	            if(pstmt != null){
+	                try{pstmt.close();}catch(SQLException ignore){}
+	            }
+	            if(conn != null){
+	                try{conn.close();}catch(SQLException ignore){}
+	            }
 	        }
-
-
 		}
-
-
 }
