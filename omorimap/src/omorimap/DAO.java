@@ -16,17 +16,6 @@ public class DAO {
 		private static final String USER="root";
 		private static final String PASSWD="naoi";
 
-
-//		//接続用の情報を初期化
-//        private static Connection conn = null;
-//        private static Statement stmt = null;
-//        private static PreparedStatement pstmt = null;
-//        private static ResultSet rs = null;
-
-//		//DTOを格納するArrayListの作成
-//		private ArrayList<DTO> list = new ArrayList<DTO>();
-
-
 		//DBに接続するためのメソッド
 		public static Connection createConnection(){
 			Connection conn = null;
@@ -146,55 +135,22 @@ public class DAO {
 	        }
 		}
 
-//		//レコードをDBから削除
-//		public static void deleteDb(int no) {
-//			// 変数宣言
-//	        Connection conn = null;  // DBコネクション
-//	        PreparedStatement pstmt = null;   // SQLステートメント
-//
-//	        // SQL文作成
-//	        String sql = "DELETE FROM list WHERE no = \"" + no + "\"";
-//
-//	        try {
-//	        	conn= DAO.createConnection();
-//				pstmt = conn.prepareStatement(sql);
-//
-//				//SQLをDBへ発行
-//				pstmt.executeUpdate();
-//
-//				//接続などを閉じる
-//		    	pstmt.close();
-//		    	DAO.disConnection(conn);
-//
-//	        }catch(SQLException e){
-//	            System.out.println("Errorが発生しました！\n"+e);
-//	        }finally{
-//	            // リソースの開放
-//	            if(pstmt != null){
-//	                try{pstmt.close();}catch(SQLException ignore){}
-//	            }
-//	            if(conn != null){
-//	                try{conn.close();}catch(SQLException ignore){}
-//	            }
-//	        }
-//		}
-
 		//一覧表のレコードを表示させなくするためのメソッド
 		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるよう更新
-		public static void deleteDtoRcd(int dltnum) {
+		public static void deleteDtoRcd(int intDltNumId) {
 			// 変数宣言
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
 	        ArrayList<DTO> list = ListDTO.getList();
 	        int intNo = 0;	//一覧表のNoを1で初期化
-	        int intSetDltnum = dltnum - 1;	//一覧表のNoとリストのインデクスを合わせる
+	        int intSetDltNumId = intDltNumId - 1;	//listのidとリストの引数を合わせる為-1する
 	        String sql = "UPDATE list SET `no` = ? WHERE `id` = ?;";
 
 	        //一覧表から削除するレコードを取得
-	        DTO DltnumDto = list.get(intSetDltnum);
+	        DTO DltnumDto = list.get(intSetDltNumId);
 	        //一覧表から削除するDTOのnoを0に変更し、listを書き換え
 	        DltnumDto.setNo(0);
-	        list.set(intSetDltnum, DltnumDto);
+	        list.set(intSetDltNumId, DltnumDto);
 
 	        try {
 		        conn = DAO.createConnection();

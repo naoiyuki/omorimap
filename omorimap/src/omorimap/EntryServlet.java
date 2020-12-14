@@ -41,11 +41,14 @@ public class EntryServlet extends HttpServlet {
 		//URL用の変数
 		String disp = "";
 
-		//requestパラメータを取得
-		int intNo = ListDTO.getList().size() + 1;
+		//パラメータを取得
+		String strNumId = request.getParameter("numid");
 		String strShopname = request.getParameter("shopname");
 		String strComments = request.getParameter("comments");
-		String strDltnum = request.getParameter("dltnum");
+		String strDltNumId = request.getParameter("dltnumid");
+		//insert用のNo取得
+		int intLastIndex = ListDTO.getList().size() - 1;	//size()-1してListDTOの最終行の引数を取得
+		int intNo = ListDTO.getList().get(intLastIndex).getNo();	//listDTOの最終行のNoを取得
 		//現在日時を取得
 		Date dt = NowTime.nowSqlTime();
         //requestにてホストのIPアドレスを取得
@@ -74,19 +77,21 @@ public class EntryServlet extends HttpServlet {
 			//エラーメッセージ無し
 			else
 			{
-			//上記の値をDBに更新
-			DAO.insertRcd(intNo,strShopname,strComments,dt,ip);
+				//現状の最終行のNoに+1する
+				intNo++;
+				//上記の値をDBに更新
+				DAO.insertRcd(intNo,strShopname,strComments,dt,ip);
 
-			//Omorimapに画面遷移
-			disp = "/omorimap/Omorimap";
-			response.sendRedirect(disp);
+				//Omorimapに画面遷移
+				disp = "/omorimap/Omorimap";
+				response.sendRedirect(disp);
 			}
 		}
 
 		//OmorimapのDBへの削除処理
-		if(strDltnum != null) {
-			int intDltnum = Integer.parseInt(strDltnum);
-			DAO.deleteDtoRcd(intDltnum);
+		if(strDltNumId != null) {
+			int intDltNumId = Integer.parseInt(strDltNumId);
+			DAO.deleteDtoRcd(intDltNumId);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";

@@ -116,7 +116,7 @@ public class Omorimap extends HttpServlet {
 	    		DTO Dto = list.get(i);
 
 	    		//レコードの各パラメーターを取得
-	    		//int intDtoId = Dto.getId();
+	    		int intDtoId = Dto.getId();
 	    		int intDtoNo = Dto.getNo();
 	    		String strDtoShopname = Dto.getShopname();
 	    		String strDtoComments = Dto.getComments();
@@ -128,7 +128,9 @@ public class Omorimap extends HttpServlet {
 		    		out.println("            <tr>");
 		    		out.println("                <td class=\"num\">");
 		    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
-		    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + intDtoNo + "\">");
+		    		out.println("	                <button type=\"submit\" name=\"numid\" value=\"" + intDtoId + "\">");
+		    		out.println(intDtoNo);
+		    		out.println("	                </button>");
 		    		out.println("                	</form>");
 		    		out.println("                </td>");
 		    		out.println("                <td>");
@@ -147,7 +149,7 @@ public class Omorimap extends HttpServlet {
 		    		out.println("                </td>");
 		    		out.println("                <td class=\"dlt\">");
 		    		out.println("                	<form method=\"post\" action=\"/omorimap/EntryServlet\" onsubmit = \"return btndlt();\">");
-		    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + intDtoNo + "\">");
+		    		out.println("		            	<button type=\"image\" name=\"dltnumid\" value=\"" + intDtoId + "\">");
 		    		out.println("		            	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\" >");
 		    		out.println("	                </form>");
 		    		out.println("                </td>");
