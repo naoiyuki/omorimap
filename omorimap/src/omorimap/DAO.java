@@ -187,14 +187,14 @@ public class DAO {
 	        PreparedStatement pstmt = null;
 	        ArrayList<DTO> list = ListDTO.getList();
 	        int intNo = 0;	//一覧表のNoを1で初期化
-	        int setDltnum = dltnum - 1;	//一覧表のNoとリストのインデクスを合わせる
-	        String sql = "UPDATE list SET `no` = \"?\" WHERE `id` = ?";
+	        int intSetDltnum = dltnum - 1;	//一覧表のNoとリストのインデクスを合わせる
+	        String sql = "UPDATE list SET `no` = ? WHERE `id` = ?;";
 
 	        //一覧表から削除するレコードを取得
-	        DTO DltnumDto = list.get(setDltnum);
+	        DTO DltnumDto = list.get(intSetDltnum);
 	        //一覧表から削除するDTOのnoを0に変更し、listを書き換え
 	        DltnumDto.setNo(0);
-	        list.set(setDltnum, DltnumDto);
+	        list.set(intSetDltnum, DltnumDto);
 
 	        try {
 		        conn = DAO.createConnection();

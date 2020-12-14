@@ -123,33 +123,36 @@ public class Omorimap extends HttpServlet {
 	    		Date dtDtoDt = Dto.getDt();
 	    		String strDtoIp = Dto.getIp();
 
-	    		out.println("            <tr>");
-	    		out.println("                <td class=\"num\">");
-	    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
-	    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + intDtoNo + "\">");
-	    		out.println("                	</form>");
-	    		out.println("                </td>");
-	    		out.println("                <td>");
-	    		out.println("                	<font size = \"4\">");
-	    		out.println(strDtoShopname);
-	    		out.println("                	</font>");
-	    		out.println("                <div>");
-	    		out.println(strDtoComments);
-	    		out.println("                </div>");
-	    		out.println("                </td>");
-	    		out.println("                <td>");
-	    		out.println(dtDtoDt);
-	    		out.println("                <div>");
-	    		out.println(strDtoIp);
-	    		out.println("                </div>");
-	    		out.println("                </td>");
-	    		out.println("                <td class=\"dlt\">");
-	    		out.println("                	<form method=\"post\" action=\"/omorimap/EntryServlet\" onsubmit = \"return btndlt();\">");
-	    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + intDtoNo + "\">");
-	    		out.println("		            	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\" >");
-	    		out.println("	                </form>");
-	    		out.println("                </td>");
-	    		out.println("            </tr>");
+	    		//Noカラムの値が0なら表示しない　一覧表から削除されたレコードのNoは0にしてある為
+	    		if(intDtoNo > 0) {
+		    		out.println("            <tr>");
+		    		out.println("                <td class=\"num\">");
+		    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
+		    		out.println("	                <input type=\"submit\" name=\"num\" value=\"" + intDtoNo + "\">");
+		    		out.println("                	</form>");
+		    		out.println("                </td>");
+		    		out.println("                <td>");
+		    		out.println("                	<font size = \"4\">");
+		    		out.println(strDtoShopname);
+		    		out.println("                	</font>");
+		    		out.println("                <div>");
+		    		out.println(strDtoComments);
+		    		out.println("                </div>");
+		    		out.println("                </td>");
+		    		out.println("                <td>");
+		    		out.println(dtDtoDt);
+		    		out.println("                <div>");
+		    		out.println(strDtoIp);
+		    		out.println("                </div>");
+		    		out.println("                </td>");
+		    		out.println("                <td class=\"dlt\">");
+		    		out.println("                	<form method=\"post\" action=\"/omorimap/EntryServlet\" onsubmit = \"return btndlt();\">");
+		    		out.println("		            	<button type=\"image\" name=\"dltnum\" value=\"" + intDtoNo + "\">");
+		    		out.println("		            	<image src=\"file:///C:/Users/naoiyuki/git/omorimap/omorimap/trashbox.png\" width=\"30\" height=\"30\" >");
+		    		out.println("	                </form>");
+		    		out.println("                </td>");
+		    		out.println("            </tr>");
+	    		}
 	    	}
 
 	    }
