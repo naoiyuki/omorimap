@@ -136,6 +136,7 @@ public class DAO {
 		}
 
 		//レコードを一覧表に表示させなくするためのメソッド
+		//sqlのdelete文はレコードを削除してしまうため使用しない
 		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるようにし、listテーブルを書き換える
 		public static void hideRcd(int intDltNumId) {
 			// 変数宣言
@@ -201,4 +202,41 @@ public class DAO {
 	            }
 	        }
 		}
+		//レコードをDBに上書き
+				public static void updateRcd(int id,String shopname,String comments,Date dt,String ip){
+			        Connection conn = null;
+			        PreparedStatement pstmt = null;
+
+			        // SQL文作成
+			        String sql = "UPDATE list SET `shopname` = ?,`comments` = ?,`dt` = ?,`ip` = ? WHERE `id` = ?;";
+
+					try {
+						conn= DAO.createConnection();
+						pstmt = conn.prepareStatement(sql);
+
+						pstmt.setString(1,shopname);
+						pstmt.setString(2,comments);
+						pstmt.setDate(3,dt);
+						pstmt.setString(4,ip);
+						pstmt.setInt(5, id);
+
+						//SQLをDBへ発行
+						pstmt.executeUpdate();
+
+						//接続などを閉じる
+				    	pstmt.close();
+				    	DAO.disConnection(conn);
+
+					}catch(SQLException e){
+			            System.out.println("Errorが発生しました！\n"+e);
+			        }finally{
+			            // リソースの開放
+			            if(pstmt != null){
+			                try{pstmt.close();}catch(SQLException ignore){}
+			            }
+			            if(conn != null){
+			                try{conn.close();}catch(SQLException ignore){}
+			            }
+			        }
+				}
 }

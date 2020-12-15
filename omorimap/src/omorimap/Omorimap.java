@@ -132,7 +132,7 @@ public class Omorimap extends HttpServlet {
 	    		if(intDtoNo > 0) {
 		    		out.println("            <tr>");
 		    		out.println("                <td class=\"num\">");
-		    		out.println("                	<form method=\"get\" action=\"https://www.google.com/\">");
+		    		out.println("                	<form method=\"post\" action=\"/omorimap/EntryServlet\">");
 		    		out.println("	                <button type=\"submit\" name=\"numid\" value=\"" + intDtoId + "\">");
 		    		out.println(intDtoNo);
 		    		out.println("	                </button>");

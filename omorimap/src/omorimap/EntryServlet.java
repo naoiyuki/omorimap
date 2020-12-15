@@ -50,10 +50,9 @@ public class EntryServlet extends HttpServlet {
 		String strDltNumId = request.getParameter("dltnumid");
 		//listを取得
 		ArrayList<DTO> list = ListDTO.getList();
-		//insert用　一覧表のNoの最後の値を取得する為の変数
+		//ListDTOの引数の最大値を取得
 		int intListLastIndex = list.size() - 1;	//size()-1してListDTOの最終行の引数を取得
-		//int intNo = ListDTO.getList().get(intListLastIndex).getNo();	//listDTOの最終行のNoを取得
-		int intLastNo  = 0;	//最後のNo用変数を初期化
+
 		//現在日時を取得
 		Date dt = NowTime.nowSqlTime();
         //requestにてホストのIPアドレスを取得
@@ -79,20 +78,34 @@ public class EntryServlet extends HttpServlet {
 				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
 		        dispatch.forward(request, response);
 			}
-			//エラー無し→追加
-			else
+			//エラー無し,id無し(idはsqlで自動インクリメント)→新規追加
+			else if (strNumId == null)
 			{
+				//表示されるNoの最大値用の変数を初期化
+				int intMaxNo  = 0;
+
 				//最後のNoを取得
 				for(int i = intListLastIndex;i > 0;i--) {
 					if(list.get(i).getNo() > 0) {
-						intLastNo = list.get(i).getNo();
+						intMaxNo = list.get(i).getNo();
 						break;
 					}
 				}
 				//追加するNoの為、最後のNoに+1する
-				intLastNo++;
+				intMaxNo++;
 				//上記の値をDBに更新
-				DAO.insertRcd(intLastNo,strShopname,strComments,dt,ip);
+				DAO.insertRcd(intMaxNo,strShopname,strComments,dt,ip);
+
+				//Omorimapに画面遷移
+				disp = "/omorimap/Omorimap";
+				response.sendRedirect(disp);
+			}
+			//エラー無し,id有り→上書き
+			else if (strNumId != null) {
+				int intNumId = Integer.parseInt(strNumId);
+
+				//上記の値をDBに更新
+				DAO.updateRcd(intNumId,strShopname,strComments,dt,ip);
 
 				//Omorimapに画面遷移
 				disp = "/omorimap/Omorimap";
@@ -110,8 +123,20 @@ public class EntryServlet extends HttpServlet {
 			response.sendRedirect(disp);
 		}
 
-		//Omorimapからnumidを受け取ってパラメーターをOmorimapSubで再表示
+		//編集用の画面遷移処理　Omorimapからnumidを受け取り該当するレコードのパラメーターをOmorimapSubで再表示
 		if(strNumId != null) {
+			//編集するレコード(DTO)のid
+			int intNumId = Integer.parseInt(strNumId);
+			//編集するレコード(DTO)が格納されているlistDTOのインデックス
+			int intListDTOIndex = intNumId - 1;
+			DTO editDto = list.get(intListDTOIndex);
+			//request.setAttribute("id", editDto.getId()); //idはOmorimapのものを転送するため不要
+			request.setAttribute("shopname", editDto.getShopname());
+			request.setAttribute("comments", editDto.getComments());
+			//OmorimapSubに画面遷移
+			disp = "/OmorimapSub";
+			RequestDispatcher dispatch = request.getRequestDispatcher(disp);
+	        dispatch.forward(request, response);
 
 		}
 	}

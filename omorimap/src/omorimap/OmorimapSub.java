@@ -30,6 +30,14 @@ public class OmorimapSub extends HttpServlet {
 		response.setContentType("text/html; charset=UTF-8");
 		PrintWriter out=response.getWriter();
 
+		//パラメータを取得
+		String errMsg = (String)request.getAttribute("errMsg");	//OmorimapSubの全項目に記入がされなかった時のエラー表示用の変数
+		String shopname =  request.getParameter("shopname");	//OmorimapSubの全項目に記入されなかった場合に店舗名を返す
+		String comments =  request.getParameter("comments");	//OmorimapSubの全項目に記入されなかった場合にコメントを返す
+		String strNumId = request.getParameter("numid");	//Omorimapで選択されたレコードのid
+		String rshopname = (String)request.getAttribute("shopname");	//Omorimapで選択されたレコードのshopname
+		String rcomments = (String)request.getAttribute("comments");	//Omorimapで選択されたレコードのcomments
+
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
 		out.println("<head>");
@@ -83,24 +91,30 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		新規投稿＆編集画面");
 		out.println("	</p>");
 
-		//OmorimapSubの全項目に記入がされなかった時のエラー表示用の変数
-		String errMsg = (String)request.getAttribute("errMsg");
-		if(!(errMsg == null)) {
+		if(errMsg != null) {
 			out.println("		<p class=\"errmsg\">");
 			out.println(		errMsg);
 			out.println("		</p>");
 		}
 
 		out.println("	<form name=\"form1\" action=\"/omorimap/EntryServlet\" method=\"post\">");
+
+		//編集の場合、渡されたidをhidden型でインプット
+		if(strNumId != null) {
+			out.println("	<input type=\"hidden\" name=\"numid\" value=\"");
+			out.println(strNumId);
+			out.println("\">");
+		}
+
 		out.println("		<p class=\"shopname\">");
 		out.println("			店舗名");
 		out.println("			&nbsp;");
 		out.println("			<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\" value=\"");
 
-		//OmorimapSubの全項目に記入されなかった場合に店舗名を返す
-		String shopname =  request.getParameter("shopname");
-		if(!(shopname == null)) {
+		if(shopname != null) {
 			out.println(shopname);
+		} else if(rshopname != null) {
+			out.println(rshopname);
 		}
 
 		out.println("\">");
@@ -113,10 +127,10 @@ public class OmorimapSub extends HttpServlet {
 		out.println("				<span class=\"cmntinner\">");
 		out.println("					<textarea name=\"comments\" class=\"comments\" maxlength=\"100\">");
 
-		//OmorimapSubの全項目に記入されなかった場合にコメントを返す
-		String comments =  request.getParameter("comments");
-		if(!(comments == null)) {
+		if(comments != null) {
 			out.println(comments);
+		} else if (rcomments != null) {
+			out.println(rcomments);
 		}
 
 		out.println("</textarea>");
