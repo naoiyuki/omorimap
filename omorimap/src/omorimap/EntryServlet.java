@@ -2,6 +2,7 @@ package omorimap;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,6 +34,7 @@ public class EntryServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	//Omorimap,OmorimapSubから受け取った値に応じて処理を行う
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//doGet(request, response);
 		request.setCharacterEncoding("UTF-8");
@@ -46,9 +48,12 @@ public class EntryServlet extends HttpServlet {
 		String strShopname = request.getParameter("shopname");
 		String strComments = request.getParameter("comments");
 		String strDltNumId = request.getParameter("dltnumid");
-		//insert用のNo取得
-		int intLastIndex = ListDTO.getList().size() - 1;	//size()-1してListDTOの最終行の引数を取得
-		int intNo = ListDTO.getList().get(intLastIndex).getNo();	//listDTOの最終行のNoを取得
+		//listを取得
+		ArrayList<DTO> list = ListDTO.getList();
+		//insert用　一覧表のNoの最後の値を取得する為の変数
+		int intListLastIndex = list.size() - 1;	//size()-1してListDTOの最終行の引数を取得
+		//int intNo = ListDTO.getList().get(intListLastIndex).getNo();	//listDTOの最終行のNoを取得
+		int intLastNo  = 0;	//最後のNo用変数を初期化
 		//現在日時を取得
 		Date dt = NowTime.nowSqlTime();
         //requestにてホストのIPアドレスを取得
@@ -77,10 +82,17 @@ public class EntryServlet extends HttpServlet {
 			//エラー無し→追加
 			else
 			{
-				//現状の最終行のNoに+1する
-				intNo++;
+				//最後のNoを取得
+				for(int i = intListLastIndex;i > 0;i--) {
+					if(list.get(i).getNo() > 0) {
+						intLastNo = list.get(i).getNo();
+						break;
+					}
+				}
+				//追加するNoの為、最後のNoに+1する
+				intLastNo++;
 				//上記の値をDBに更新
-				DAO.insertRcd(intNo,strShopname,strComments,dt,ip);
+				DAO.insertRcd(intLastNo,strShopname,strComments,dt,ip);
 
 				//Omorimapに画面遷移
 				disp = "/omorimap/Omorimap";
@@ -91,7 +103,7 @@ public class EntryServlet extends HttpServlet {
 		//Omorimapから受け取ったdltnumidに基づいて削除処理
 		if(strDltNumId != null) {
 			int intDltNumId = Integer.parseInt(strDltNumId);
-			DAO.deleteDtoRcd(intDltNumId);
+			DAO.hideRcd(intDltNumId);
 
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";

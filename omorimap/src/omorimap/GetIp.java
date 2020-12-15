@@ -2,10 +2,9 @@ package omorimap;
 
 import javax.servlet.http.HttpServletRequest;
 
+//クライアントのIPを取得するクラス
 public class GetIp {
-
 	public static String getClientIp(HttpServletRequest request) {
-
         String remoteAddr = "";
 
         if (request != null) {
@@ -14,7 +13,6 @@ public class GetIp {
                 remoteAddr = request.getRemoteAddr();
             }
         }
-
         return remoteAddr;
     }
 

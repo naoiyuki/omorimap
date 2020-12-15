@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Omorimap
  */
+//一覧画面の表示
 public class Omorimap extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

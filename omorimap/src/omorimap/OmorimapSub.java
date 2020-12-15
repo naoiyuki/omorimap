@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class OmorimapSub
  */
+//登録画面の表示
 public class OmorimapSub extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

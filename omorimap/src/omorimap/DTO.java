@@ -2,6 +2,7 @@ package omorimap;
 
 import java.sql.Date;
 
+//listテーブルの各レコードを格納するbean
 public class DTO {
 	private int id;				//レコードのインデックス
 	private int no;				//一覧表の番号

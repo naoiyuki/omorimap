@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+//現在時刻を取得するクラス
 public class NowTime {
 	//サーブレット用　現在時刻
 	public static String nowTime() {

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+//データベースとのやり取りを行うクラス
 public class DAO {
 		//接続用の情報をフィールドに定数として定義
 		private static final String RDB_DRIVE="com.mysql.jdbc.Driver";
@@ -134,9 +135,9 @@ public class DAO {
 	        }
 		}
 
-		//一覧表のレコードを表示させなくするためのメソッド
-		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるよう更新
-		public static void deleteDtoRcd(int intDltNumId) {
+		//レコードを一覧表に表示させなくするためのメソッド
+		//該当するレコードのnoの値を0に変更、noは0を飛ばして連番になるようにし、listテーブルを書き換える
+		public static void hideRcd(int intDltNumId) {
 			// 変数宣言
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
@@ -157,7 +158,7 @@ public class DAO {
 		        conn.setAutoCommit(false);
 
 		        try {
-			        //DTO,DBのlistテーブルの各レコードのnoが0を飛ばして連番にする処理
+			        //ListDTOとDBのlistテーブルの各レコードのnoが0を飛ばして連番にする処理
 			        for(int i = 0;i < list.size();i++){
 			        	DTO Dto = list.get(i);
 

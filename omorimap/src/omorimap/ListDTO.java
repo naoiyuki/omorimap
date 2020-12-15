@@ -1,7 +1,8 @@
 package omorimap;
 
-import java.util.ArrayList;		//dbに登録されたlist
+import java.util.ArrayList;
 
+//listテーブルのデータを格納するbean
 public class ListDTO {
 	private static ArrayList<DTO> list;
 
