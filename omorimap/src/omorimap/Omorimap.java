@@ -108,7 +108,11 @@ public class Omorimap extends HttpServlet {
 	    	// DAOオブジェクト化
 	    	//全レコードを取得
 	    	DAO objDao = new DAO();
-	    	list = objDao.selectAllRcd();
+//	    	list = objDao.selectAllRcd();
+
+	    	objDao.selectAllRcd();
+
+	    	list = ListDTO.getList();
 
 
 	    	//各レコードをfor文を使って取得

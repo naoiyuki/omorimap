@@ -54,7 +54,7 @@ public class EntryServlet extends HttpServlet {
         //requestにてホストのIPアドレスを取得
 		String ip = GetIp.getClientIp(request);
 
-		//OmorimapSubのDBへの追加処理
+		//OmorimapSubの項目をDBへ追加処理
 		if(strShopname != null && strComments != null) {
 			//requestパラメータをチェック
 			String errMsg = "";
@@ -74,7 +74,7 @@ public class EntryServlet extends HttpServlet {
 				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
 		        dispatch.forward(request, response);
 			}
-			//エラーメッセージ無し
+			//エラー無し→追加
 			else
 			{
 				//現状の最終行のNoに+1する
@@ -88,7 +88,7 @@ public class EntryServlet extends HttpServlet {
 			}
 		}
 
-		//OmorimapのDBへの削除処理
+		//Omorimapから受け取ったdltnumidに基づいて削除処理
 		if(strDltNumId != null) {
 			int intDltNumId = Integer.parseInt(strDltNumId);
 			DAO.deleteDtoRcd(intDltNumId);
@@ -96,6 +96,11 @@ public class EntryServlet extends HttpServlet {
 			//Omorimapに画面遷移
 			disp = "/omorimap/Omorimap";
 			response.sendRedirect(disp);
+		}
+
+		//Omorimapからnumidを受け取ってパラメーターをOmorimapSubで再表示
+		if(strNumId != null) {
+
 		}
 	}
 

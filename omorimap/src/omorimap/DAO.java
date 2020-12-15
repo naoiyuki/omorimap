@@ -44,8 +44,8 @@ public class DAO {
 	        }
 		}
 
-		// DBのテーブルに登録された全てのレコードをArrayList<DTO>型オブジェクトへ格納し、戻り値として返す
-		public ArrayList<DTO> selectAllRcd(){
+		// DBのlistテーブルに登録された全てのレコードをListDTOへ格納
+		public void selectAllRcd(){
 			Connection conn = null;
 			Statement stmt = null;
 			ResultSet rs = null;
@@ -90,10 +90,9 @@ public class DAO {
 	            }
 	        }
 
-			//ListDTOにデータを登録
+			//ListDTOにデータを格納
 			ListDTO.setList(list);
 
-			return list;
 		}
 
 		//レコードをDBに追加
