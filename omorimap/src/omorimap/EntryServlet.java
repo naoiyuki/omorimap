@@ -58,7 +58,7 @@ public class EntryServlet extends HttpServlet {
         //requestにてホストのIPアドレスを取得
 		String ip = GetIp.getClientIp(request);
 
-		//OmorimapSubの項目をDBへ追加処理
+		//OmorimapSubの各値をDBへ追加処理
 		if(strShopname != null && strComments != null) {
 			//requestパラメータをチェック
 			String errMsg = "";
@@ -68,7 +68,6 @@ public class EntryServlet extends HttpServlet {
 			if("".equals(strComments.trim())) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
-
 			//入力不備がないかエラーチェック
 			if(errMsg != "") {
 				request.setAttribute("errMsg",errMsg);
@@ -102,7 +101,7 @@ public class EntryServlet extends HttpServlet {
 			}
 			//エラー無し,id有り→上書き
 			else if (strNumId != null) {
-				int intNumId = Integer.parseInt(strNumId);
+				int intNumId = Integer.parseInt(strNumId.trim());
 
 				//上記の値をDBに更新
 				DAO.updateRcd(intNumId,strShopname,strComments,dt,ip);
@@ -123,8 +122,8 @@ public class EntryServlet extends HttpServlet {
 			response.sendRedirect(disp);
 		}
 
-		//編集用の画面遷移処理　Omorimapからnumidを受け取り該当するレコードのパラメーターをOmorimapSubで再表示
-		if(strNumId != null) {
+		//OmorimapSub編集用の画面遷移処理 Omorimapからnumidを受け取り該当するレコードのパラメーターをOmorimapSubで再表示
+		if(strNumId != null && strShopname == null) {
 			//編集するレコード(DTO)のid
 			int intNumId = Integer.parseInt(strNumId);
 			//編集するレコード(DTO)が格納されているlistDTOのインデックス

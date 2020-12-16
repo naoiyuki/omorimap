@@ -101,9 +101,7 @@ public class OmorimapSub extends HttpServlet {
 
 		//編集の場合、渡されたidをhidden型でインプット
 		if(strNumId != null) {
-			out.println("	<input type=\"hidden\" name=\"numid\" value=\"");
-			out.println(strNumId);
-			out.println("\">");
+			out.println("	<input type=\"hidden\" name=\"numid\" value=\"" + strNumId + "\">");
 		}
 
 		out.println("		<p class=\"shopname\">");
