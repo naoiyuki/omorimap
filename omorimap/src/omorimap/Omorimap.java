@@ -26,8 +26,9 @@ public class Omorimap extends HttpServlet {
     }
 
     // 変数宣言
-    // SampleDTO型のオブジェクトを格納するArrayList
+    // DTO型,Category_masterDTO型のオブジェクトを格納するArrayList
     private ArrayList<DTO> list = null;
+    private ArrayList<Category_masterDTO> category_master = null;
     //現在時刻の取得
     String fdate1 = NowTime.nowTime();
 
@@ -66,6 +67,38 @@ public class Omorimap extends HttpServlet {
 		out.println("		table td.dlt{");
 		out.println("		text-align:center;");
 		out.println("		}");
+		out.println("		table td.ctgry{");
+		out.println("		text-align:center;");
+		out.println("		}");
+		out.println("		table td.star{");
+		out.println("		text-align:center;");
+		out.println("		}");
+		out.println("		/*星用のcss*/");
+		out.println("		.star5_rating{");
+		out.println("		    position: relative;");
+		out.println("		    z-index: 0;");
+		out.println("		    display: inline-block;");
+		out.println("		    white-space: nowrap;");
+		out.println("		    color: #CCCCCC; /* グレーカラー 自由に設定化 */");
+		out.println("		    /*font-size: 30px; フォントサイズ 自由に設定化 */");
+		out.println("		}");
+		out.println("		.star5_rating:before, .star5_rating:after{");
+		out.println("		    content: '★★★★★';");
+		out.println("		}");
+		out.println("		.star5_rating:after{");
+		out.println("		    position: absolute;");
+		out.println("		    z-index: 1;");
+		out.println("		    top: 0;");
+		out.println("		    left: 0;");
+		out.println("		    overflow: hidden;");
+		out.println("		    white-space: nowrap;");
+		out.println("		    color: #ffcf32; /* イエローカラー 自由に設定化 */");
+		out.println("		}");
+		out.println("		.star5_rating[data-rate=\"5\"]:after{ width: 100%; } /* 星5 */");
+		out.println("		.star5_rating[data-rate=\"4\"]:after{ width: 80%; } /* 星4 */");
+		out.println("		.star5_rating[data-rate=\"3\"]:after{ width: 60%; } /* 星3 */");
+		out.println("		.star5_rating[data-rate=\"2\"]:after{ width: 40%; } /* 星2 */");
+		out.println("		.star5_rating[data-rate=\"1\"]:after{ width: 20%; } /* 星1 */");
 		out.println("	</style>");
 		out.println("	<script>");
 		out.println("		function btndlt(){");
@@ -98,6 +131,12 @@ public class Omorimap extends HttpServlet {
 		out.println("                店名");
 		out.println("                </th>");
 		out.println("                <th>");
+		out.println("                カテゴリー");
+		out.println("                </th>");
+		out.println("                <th>");
+		out.println("                評価");
+		out.println("                </th>");
+		out.println("                <th>");
 		out.println("                最終更新");
 		out.println("                </th>");
 		out.println("                <th>");
@@ -114,6 +153,7 @@ public class Omorimap extends HttpServlet {
 	    	objDao.selectAllRcd();
 
 	    	list = ListDTO.getList();
+	    	category_master = Category_masterListDTO.getCategory_master();
 
 
 	    	//各レコードをfor文を使って取得
@@ -127,6 +167,8 @@ public class Omorimap extends HttpServlet {
 	    		String strDtoComments = Dto.getComments();
 	    		Date dtDtoDt = Dto.getDt();
 	    		String strDtoIp = Dto.getIp();
+	    		String strCDtoCategryname = category_master.get(Dto.getCategoryno() - 1).getCategoryname();
+	    		int intDtoStar = Dto.getStar();
 
 	    		//Noカラムの値が0なら表示しない　一覧表から削除されたレコードのNoは0にしてある為
 	    		if(intDtoNo > 0) {
@@ -145,6 +187,12 @@ public class Omorimap extends HttpServlet {
 		    		out.println("                <div>");
 		    		out.println(strDtoComments);
 		    		out.println("                </div>");
+		    		out.println("                </td>");
+		    		out.println("                <td class=\"ctgry\">");
+		    		out.println(strCDtoCategryname);
+		    		out.println("                </td>");
+		    		out.println("                <td class=\"star\">");
+		    		out.println("                <span class=\"star5_rating\" data-rate=\"" + intDtoStar + "\"></span>");
 		    		out.println("                </td>");
 		    		out.println("                <td>");
 		    		out.println(dtDtoDt);

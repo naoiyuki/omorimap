@@ -51,6 +51,7 @@ public class DAO {
 			Statement stmt = null;
 			ResultSet rs = null;
 			ArrayList<DTO> list = new ArrayList<DTO>();
+			ArrayList<Category_masterDTO> category_master = new ArrayList<Category_masterDTO>();
 			ListDTO.setList(null);
 
 	        // SQL文作成
@@ -58,8 +59,9 @@ public class DAO {
 
 			try {
 				conn= DAO.createConnection();
-				stmt = conn.createStatement();
 
+				//listテーブルの取得
+				stmt = conn.createStatement();
 				// SQL文発行
 		    	rs = stmt.executeQuery(sql);
 
@@ -72,12 +74,32 @@ public class DAO {
 		    		objDto.setComments(rs.getString("comments"));
 		    		objDto.setDt(rs.getDate("dt"));
 		    		objDto.setIp(rs.getString("ip"));
+		    		objDto.setCategoryno(rs.getInt("categoryno"));
+		    		objDto.setStar(rs.getInt("star"));
 
 		    		list.add(objDto);
 		    	}
-		    	//接続などを閉じる
 		    	rs.close();
 		    	stmt.close();
+
+		    	//category_masterテーブルの取得
+		    	sql = "SELECT * FROM category_master";
+		    	stmt = conn.createStatement();
+		    	// SQL文発行
+		    	rs = stmt.executeQuery(sql);
+
+		    	// 検索結果をArrayListに格納
+		    	while(rs.next()) {
+		    		Category_masterDTO objCDto = new Category_masterDTO();
+		    		objCDto.setCategoryno(rs.getInt("categoryno"));
+		    		objCDto.setCategoryname(rs.getString("categoryname"));
+
+		    		category_master.add(objCDto);
+		    	}
+		    	rs.close();
+		    	stmt.close();
+
+		    	//接続を閉じる
 		    	DAO.disConnection(conn);
 			}catch(SQLException e){
 	            System.out.println("Errorが発生しました！\n"+e);
@@ -91,29 +113,30 @@ public class DAO {
 	            }
 	        }
 
-			//ListDTOにデータを格納
+			//ListDTO,Category_masterListDTOにデータを格納
 			ListDTO.setList(list);
-
+			Category_masterListDTO.setCategory_master(category_master);
 		}
 
 		//レコードをDBに追加
-		public static void insertRcd(int no,String shopname,String comments,Date dt,String ip){
+		public static void insertRcd(int no,String shopname,String comments,Date dt,String ip,int categoryno,int star){
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
 
 	        // SQL文作成
-	        String sql = "INSERT INTO list (no,shopname,comments,dt,ip) VALUES (?,?,?,?,?)";
+	        String sql = "INSERT INTO list (no,shopname,comments,dt,ip,categoryno,star) VALUES (?,?,?,?,?,?,?)";
 
 			try {
 				conn= DAO.createConnection();
 				pstmt = conn.prepareStatement(sql);
-
 
 				pstmt.setInt(1, no);
 				pstmt.setString(2,shopname);
 				pstmt.setString(3,comments);
 				pstmt.setDate(4,dt);
 				pstmt.setString(5,ip);
+				pstmt.setInt(6,categoryno);
+				pstmt.setInt(7, star);
 
 				//SQLをDBへ発行
 				pstmt.executeUpdate();
@@ -203,12 +226,12 @@ public class DAO {
 	        }
 		}
 		//レコードをDBに上書き
-				public static void updateRcd(int id,String shopname,String comments,Date dt,String ip){
+				public static void updateRcd(int id,String shopname,String comments,Date dt,String ip,int categoryno,int star){
 			        Connection conn = null;
 			        PreparedStatement pstmt = null;
 
 			        // SQL文作成
-			        String sql = "UPDATE list SET `shopname` = ?,`comments` = ?,`dt` = ?,`ip` = ? WHERE `id` = ?;";
+			        String sql = "UPDATE list SET `shopname` = ?,`comments` = ?,`dt` = ?,`ip` = ?,`categoryno` = ?,`star` = ? WHERE `id` = ?;";
 
 					try {
 						conn= DAO.createConnection();
@@ -219,6 +242,8 @@ public class DAO {
 						pstmt.setDate(3,dt);
 						pstmt.setString(4,ip);
 						pstmt.setInt(5, id);
+						pstmt.setInt(6,categoryno);
+						pstmt.setInt(7, star);
 
 						//SQLをDBへ発行
 						pstmt.executeUpdate();
