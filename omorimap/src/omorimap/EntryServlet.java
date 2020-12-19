@@ -72,7 +72,7 @@ public class EntryServlet extends HttpServlet {
 			if("".equals(strComments.trim())) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
-			if(strCategoryno == null) {
+			if("".equals(strCategoryno.trim())) {
 				errMsg += "カテゴリーを選択して下さい。<br>";
 			}
 			if(strStar == null) {
@@ -86,14 +86,14 @@ public class EntryServlet extends HttpServlet {
 				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
 		        dispatch.forward(request, response);
 			}
-			//エラー無し,id無し(idはsqlで自動インクリメント)→新規追加
+			//エラー無し,Omorimapから送られてくるid無し(idはsqlで自動インクリメント)→新規追加
 			else if (strNumId == null)
 			{
 				//表示されるNoの最大値用の変数を初期化
 				int intMaxNo  = 0;
 
 				//最後のNoを取得
-				for(int i = intListLastIndex;i > 0;i--) {
+				for(int i = intListLastIndex;i >= 0;i--) {
 					if(list.get(i).getNo() > 0) {
 						intMaxNo = list.get(i).getNo();
 						break;
@@ -113,13 +113,14 @@ public class EntryServlet extends HttpServlet {
 				disp = "/omorimap/Omorimap";
 				response.sendRedirect(disp);
 			}
-			//エラー無し,id有り→上書き
+			//エラー無し,Omorimapから送られてくるid有り→上書き
 			else if (strNumId != null) {
 				//リクエストパラメーターの整数化
 				int intNumId = Integer.parseInt(strNumId.trim());
 				int intCategoryno = Integer.parseInt(strCategoryno.trim());
 				int intStar = Integer.parseInt(strStar.trim());
-
+				strShopname.trim();
+				strComments.trim();
 
 				//上記の値をDBに更新
 				DAO.updateRcd(intNumId,strShopname,strComments,dt,ip,intCategoryno,intStar);
@@ -151,8 +152,8 @@ public class EntryServlet extends HttpServlet {
 			//request.setAttribute("id", editDto.getId()); //idはOmorimapのものを転送するため不要
 			request.setAttribute("shopname", editDto.getShopname());
 			request.setAttribute("comments", editDto.getComments());
-			request.setAttribute("categoryno", editDto.getCategoryno());
-			request.setAttribute("star", editDto.getStar());
+			request.setAttribute("categoryno", String.valueOf(editDto.getCategoryno()));
+			request.setAttribute("star", String.valueOf(editDto.getStar()));
 			//OmorimapSubに画面遷移
 			disp = "/OmorimapSub";
 			RequestDispatcher dispatch = request.getRequestDispatcher(disp);
