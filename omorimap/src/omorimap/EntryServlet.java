@@ -75,6 +75,7 @@ public class EntryServlet extends HttpServlet {
 				errMsg += "店舗名を入力して下さい。<br>";
 			}
 			if("".equals(strCommentsStripped)) {
+//			if("".equals(strComments.trim())) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
 			if("".equals(strCategoryno.trim())) {
