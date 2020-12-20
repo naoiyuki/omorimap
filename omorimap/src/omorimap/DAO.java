@@ -241,9 +241,9 @@ public class DAO {
 						pstmt.setString(2,comments);
 						pstmt.setDate(3,dt);
 						pstmt.setString(4,ip);
-						pstmt.setInt(5, id);
-						pstmt.setInt(6,categoryno);
-						pstmt.setInt(7, star);
+						pstmt.setInt(5,categoryno);
+						pstmt.setInt(6, star);
+						pstmt.setInt(7, id);
 
 						//SQLをDBへ発行
 						pstmt.executeUpdate();

@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
+
+
 /**
  * Servlet implementation class EntryServlet
  */
@@ -66,10 +70,11 @@ public class EntryServlet extends HttpServlet {
 		if(strShopname != null) {
 			//入力不備がないかエラーチェック
 			String errMsg = "";
+			String strCommentsStripped = StringUtils.strip(strComments);
 			if("".equals(strShopname.trim())) {
 				errMsg += "店舗名を入力して下さい。<br>";
 			}
-			if("".equals(strComments.trim())) {
+			if("".equals(strCommentsStripped)) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
 			if("".equals(strCategoryno.trim())) {
