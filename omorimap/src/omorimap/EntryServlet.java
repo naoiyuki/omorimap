@@ -70,15 +70,16 @@ public class EntryServlet extends HttpServlet {
 		if(strShopname != null) {
 			//入力不備がないかエラーチェック
 			String errMsg = "";
+			String strShopnameStripped =  StringUtils.strip(strShopname);
 			String strCommentsStripped = StringUtils.strip(strComments);
-			if("".equals(strShopname.trim())) {
+			String strCategorynoStripped = StringUtils.strip(strCategoryno);
+			if("".equals(strShopnameStripped)) {
 				errMsg += "店舗名を入力して下さい。<br>";
 			}
 			if("".equals(strCommentsStripped)) {
-//			if("".equals(strComments.trim())) {
 				errMsg += "コメントを入力して下さい。<br>";
 			}
-			if("".equals(strCategoryno.trim())) {
+			if("".equals(strCategorynoStripped)) {
 				errMsg += "カテゴリーを選択して下さい。<br>";
 			}
 			if(strStar == null) {
