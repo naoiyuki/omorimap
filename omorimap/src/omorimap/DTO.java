@@ -12,6 +12,8 @@ public class DTO {
 	private String ip;			//クライアントIP
 	private int categoryno;		//カテゴリー番号
 	private int star;			//評価の星の数
+	private double latitude;	//マーカーの緯度
+	private double longitude;	//マーカーの経度
 
 	public int getId() {
 		return id;
@@ -67,5 +69,19 @@ public class DTO {
 	}
 	public void setStar(int star) {
 		this.star = star;
+	}
+
+	public double getLatitude() {
+		return latitude;
+	}
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 }
