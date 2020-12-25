@@ -54,6 +54,8 @@ public class EntryServlet extends HttpServlet {
 		String strCategoryno = request.getParameter("categoryno");
 		String strStar =  request.getParameter("star");
 		String strDltNumId = request.getParameter("dltnumid");
+		String strLatitude = request.getParameter("latitude");
+		String strLongitude = request.getParameter("longitude");
 
 		//list,category_masterを取得
 		ArrayList<DTO> list = ListDTO.getList();
@@ -93,7 +95,7 @@ public class EntryServlet extends HttpServlet {
 				RequestDispatcher dispatch = request.getRequestDispatcher(disp);
 		        dispatch.forward(request, response);
 			}
-			//エラー無し,Omorimapから送られてくるid無し(idはsqlで自動インクリメント)→新規追加
+			//エラー無し+パラメーターに（Omorimapから送られてくる）id無し(idはsqlで自動インクリメント)→新規追加
 			else if (strNumId == null)
 			{
 				//表示されるNoの最大値用の変数を初期化
@@ -110,27 +112,32 @@ public class EntryServlet extends HttpServlet {
 				intMaxNo++;
 
 				//リクエストパラメーターの整数化
-				int intCategoryno = Integer.parseInt(strCategoryno.trim());
-				int intStar = Integer.parseInt(strStar.trim());
+				int intCategoryno = Integer.parseInt(StringUtils.strip(strCategoryno));
+				int intStar = Integer.parseInt(StringUtils.strip(strStar));
+				double doubleLatitude = Double.parseDouble(StringUtils.strip(strLatitude));
+				double doubleLongitude = Double.parseDouble(StringUtils.strip(strLongitude));
 
 				//上記の値をDBに更新
-				DAO.insertRcd(intMaxNo,strShopname,strComments,dt,ip,intCategoryno,intStar);
+				DAO.insertRcd(intMaxNo,strShopname,strComments,dt,ip,intCategoryno,intStar,doubleLatitude,doubleLongitude);
 
 				//Omorimapに画面遷移
 				disp = "/omorimap/Omorimap";
 				response.sendRedirect(disp);
 			}
-			//エラー無し,Omorimapから送られてくるid有り→上書き
+			//エラー無し+パラメーターに（Omorimapから送られてくる）id有り→上書き
+			//OmorimapレコードのNo選択→Entryservlet(Omorimapのレコード編集時の画面遷移のみの処理)→エラーがなければここ
 			else if (strNumId != null) {
 				//リクエストパラメーターの整数化
-				int intNumId = Integer.parseInt(strNumId.trim());
-				int intCategoryno = Integer.parseInt(strCategoryno.trim());
-				int intStar = Integer.parseInt(strStar.trim());
-				strShopname.trim();
-				strComments.trim();
+				int intNumId = Integer.parseInt(StringUtils.strip(strNumId));
+				int intCategoryno = Integer.parseInt(StringUtils.strip(strCategoryno));
+				int intStar = Integer.parseInt(StringUtils.strip(strStar));
+				StringUtils.strip(strShopname);
+				StringUtils.strip(strComments);
+				double doubleLatitude = Double.parseDouble(StringUtils.strip(strLatitude));
+				double doubleLongitude = Double.parseDouble(StringUtils.strip(strLongitude));
 
 				//上記の値をDBに更新
-				DAO.updateRcd(intNumId,strShopname,strComments,dt,ip,intCategoryno,intStar);
+				DAO.updateRcd(intNumId,strShopname,strComments,dt,ip,intCategoryno,intStar,doubleLatitude,doubleLongitude);
 
 				//Omorimapに画面遷移
 				disp = "/omorimap/Omorimap";
@@ -148,7 +155,7 @@ public class EntryServlet extends HttpServlet {
 			response.sendRedirect(disp);
 		}
 
-		//OmorimapSub編集用の画面遷移処理 Omorimapからnumidを受け取り該当するレコードのパラメーターをOmorimapSubで再表示
+		//Omorimapのレコード編集時の画面遷移のみの処理 Omorimapからnumidを受け取り該当するレコードのパラメーターをOmorimapSubで再表示
 		//条件にstrShopname == nullを追加し、Omorimapから受け取ったパラメーターと判断
 		if(strNumId != null && strShopname == null) {
 			//編集するレコード(DTO)のid
@@ -156,11 +163,13 @@ public class EntryServlet extends HttpServlet {
 			//編集するレコード(DTO)が格納されているlistDTOのインデックス
 			int intListDTOIndex = intNumId - 1;
 			DTO editDto = list.get(intListDTOIndex);
-			//request.setAttribute("id", editDto.getId()); //idはOmorimapのものを転送するため不要
 			request.setAttribute("shopname", editDto.getShopname());
 			request.setAttribute("comments", editDto.getComments());
 			request.setAttribute("categoryno", String.valueOf(editDto.getCategoryno()));
 			request.setAttribute("star", String.valueOf(editDto.getStar()));
+			request.setAttribute("latitude", String.valueOf(editDto.getLatitude()));
+			request.setAttribute("longitude", String.valueOf(editDto.getLongitude()));
+
 			//OmorimapSubに画面遷移
 			disp = "/OmorimapSub";
 			RequestDispatcher dispatch = request.getRequestDispatcher(disp);

@@ -90,6 +90,10 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		div.button {");
 		out.println("			text-align:center;");
 		out.println("	</style>");
+		out.println("	<!-地図のコードの追記->");
+		out.println("	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+		out.println("	<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.css\" />");
+		out.println("	<script src=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.js\"></script>");
 		out.println("	<script type=\"text/javascript\">");
 		out.println("	function btnsave(){");
 		out.println("	  	ret = confirm(\"保存します。よろしいですか？\");");
@@ -103,10 +107,35 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		  	location.href=\"/omorimap/Omorimap\";");
 		out.println("	  	}");
 		out.println("	}");
+		out.println("	var marker;		//マーカー");
+		out.println("	var lat;		//マーカー移動後の緯度");
+		out.println("	var lng;		//マーカー移動後の緯度");
+		out.println("	function init() {");
+		out.println("		//地図を表示するdiv要素のidを設定");
+		out.println("		var map = L.map('mapcontainer');");
+		out.println("		//中心座標の指定:大森駅");
+		out.println("		var mpoint = [35.589249385284106, 139.7278683];");
+		out.println("		//地図の中心とズームレベルを指定");
+		out.println("		map.setView(mpoint, 17);");
+		out.println("		//表示するタイルレイヤのURLとAttributionコントロールの記述を設定して、地図に追加する");
+		out.println("		L.tileLayer('http://tile.openstreetmap.jp/{z}/{x}/{y}.png'");
+		out.println("		,{attribution: \"<a href='http://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors\" }).addTo(map);");
+		out.println("		//マーカーを地図に追加");
+		out.println(" 		marker = L.marker(mpoint,{draggable:true}).bindTooltip(\"登録位置\").addTo(map);");
+		out.println("    	//ドラッグイベント");
+		out.println("		marker.on('dragend', function(e) {");
+		out.println("		    //クリック位置経緯度取得");
+		out.println("		    lat = e.target._latlng.lat;");
+		out.println("    		lng = e.target._latlng.lng;");
+		out.println("    		document.getElementById('lat').value= lat;");
+		out.println("    		document.getElementById('lng').value= lng;");
+		out.println("		} );");
+		out.println("    }");
 		out.println("	</script>");
 		out.println("</head>");
-		out.println("<body>");
+		out.println("<body onload=\"init()\">");
 		out.println("	<div class = \"main\">");
+		out.println("	<div id=\"mapcontainer\" style=\"height:500px\"></div>");
 		out.println("		<div class = \"sub\">");
 		out.println("			<p class=\"title\">新規投稿＆編集画面</p>");
 		if(errMsg != null) {
@@ -174,6 +203,10 @@ public class OmorimapSub extends HttpServlet {
 
 		out.println("</textarea>");
 		out.println("						</span>");
+		out.println("				</div>");
+		out.println("				<div>");
+		out.println("					<input type=\"hidden\" name=\"latitude\" id=\"lat\">");
+		out.println("					<input type=\"hidden\" name=\"longitude\" id=\"lng\">");
 		out.println("				</div>");
 		out.println("				<div class=\"button\">");
 		out.println("					<input type=\"button\" value=\"保存\" onClick=\"btnsave()\">");

@@ -100,6 +100,10 @@ public class Omorimap extends HttpServlet {
 		out.println("		.star5_rating[data-rate=\"2\"]:after{ width: 40%; } /* 星2 */");
 		out.println("		.star5_rating[data-rate=\"1\"]:after{ width: 20%; } /* 星1 */");
 		out.println("	</style>");
+		out.println("	<!-地図のコードの追記->");
+		out.println("	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">");
+		out.println("	<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.css\" />");
+		out.println("	<script src=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.js\"></script>");
 		out.println("	<script>");
 		out.println("		function btndlt(){");
 		out.println(" 		 	ret = confirm(\"この行の情報を削除します。よろしいですか？\");");
@@ -107,54 +111,84 @@ public class Omorimap extends HttpServlet {
 		out.println("  				return false;");
 		out.println("  			}");
 		out.println("		}");
-		out.println("	</script>");
-		out.println("	");
-		out.println("</head>");
-		out.println("<body>");
-		out.println("	<div class=\"main\">");
-		out.println("<h4 align=\"right\">");
-		out.println(fdate1);
-		out.println("</h4>");
-		out.println("		<h1>大森周辺マップ</h1>");
-		out.println("		<div align =\"right\">");
-		out.println("			<button  onclick=\"location.href='/omorimap/OmorimapSub'\">");
-		out.println("			新規投稿");
-		out.println("			</button>");
-		out.println("		</div>");
-		out.println("		<p> </p>");
-		out.println("		<table border=\"1\">");
-		out.println("            <tr>");
-		out.println("                <th>");
-		out.println("                No");
-		out.println("                </th>");
-		out.println("                <th>");
-		out.println("                店名");
-		out.println("                </th>");
-		out.println("                <th>");
-		out.println("                カテゴリー");
-		out.println("                </th>");
-		out.println("                <th>");
-		out.println("                評価");
-		out.println("                </th>");
-		out.println("                <th>");
-		out.println("                最終更新");
-		out.println("                </th>");
-		out.println("                <th>");
-		out.println("                削除");
-		out.println("                </th>");
-		out.println("            </tr>");
+		out.println("		function init() {");
+		out.println("			//地図を表示するdiv要素のidを設定");
+		out.println("			var map = L.map('mapcontainer');");
+		out.println("			//中心座標の指定:大森駅");
+		out.println("			var mpoint = [35.589249385284106, 139.7278683];");
+		out.println("			//地図の中心とズームレベルを指定");
+		out.println("			map.setView(mpoint, 17);");
+		out.println("			//表示するタイルレイヤのURLとAttributionコントロールの記述を設定して、地図に追加する");
+		out.println("			L.tileLayer('http://tile.openstreetmap.jp/{z}/{x}/{y}.png'");
+		out.println("			,{attribution: \"<a href='http://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors\" }).addTo(map);");
+		out.println("			//マーカーを地図に追加");
+		out.println("			//L.marker(mpoint).bindPopup(L.popup().setContent(\"大森駅\")).bindTooltip(\"大森駅\").addTo(map);");
+		out.println("			L.marker(mpoint).bindTooltip(\"大森駅\").addTo(map);");
 
 	    try {
 	    	// DAOオブジェクト化
 	    	//全レコードを取得
 	    	DAO objDao = new DAO();
-//	    	list = objDao.selectAllRcd();
 
 	    	objDao.selectAllRcd();
 
 	    	list = ListDTO.getList();
 	    	category_master = Category_masterListDTO.getCategory_master();
 
+	    	//各レコードをfor文を使って取得
+	    	for(int i = 0;i < list.size();i++){
+	    		DTO Dto = list.get(i);
+
+	    		//レコードの各パラメーターを取得
+	    		int intDtoNo = Dto.getNo();
+	    		String strDtoShopname = Dto.getShopname();
+	    		double doubleDtoLatitude = Dto.getLatitude();
+	    		double doubleDtoLongitude = Dto.getLongitude();
+
+	    		//Noカラムの値が0なら表示しない　一覧表から削除されたレコードのNoは0にしてある為
+	    		if(intDtoNo > 0) {
+	    			out.println("			L.marker([" + doubleDtoLatitude + "," + doubleDtoLongitude + "]).bindTooltip(\"" + strDtoShopname + "\").addTo(map);");
+	    		}
+	    	}
+			out.println("	    }");
+			out.println("	</script>");
+			out.println("	");
+			out.println("</head>");
+			out.println("<body onload=\"init()\">");
+			out.println("<body>");
+			out.println("	<div class=\"main\">");
+			out.println("	<div id=\"mapcontainer\" style=\"height:500px\"></div>");
+			out.println("<h4 align=\"right\">");
+			out.println(fdate1);
+			out.println("</h4>");
+			out.println("		<h1>大森周辺マップ</h1>");
+			out.println("		<div align =\"right\">");
+			out.println("			<button  onclick=\"location.href='/omorimap/OmorimapSub'\">");
+			out.println("			新規投稿");
+			out.println("			</button>");
+			out.println("		</div>");
+			out.println("		<p> </p>");
+			out.println("		<table border=\"1\">");
+			out.println("            <tr>");
+			out.println("                <th>");
+			out.println("                No");
+			out.println("                </th>");
+			out.println("                <th>");
+			out.println("                店名");
+			out.println("                </th>");
+			out.println("                <th>");
+			out.println("                カテゴリー");
+			out.println("                </th>");
+			out.println("                <th>");
+			out.println("                評価");
+			out.println("                </th>");
+			out.println("                <th>");
+			out.println("                最終更新");
+			out.println("                </th>");
+			out.println("                <th>");
+			out.println("                削除");
+			out.println("                </th>");
+			out.println("            </tr>");
 
 	    	//各レコードをfor文を使って取得
 	    	for(int i = 0;i < list.size();i++){
