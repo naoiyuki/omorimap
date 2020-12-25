@@ -122,8 +122,6 @@ public class Omorimap extends HttpServlet {
 		out.println("			L.tileLayer('http://tile.openstreetmap.jp/{z}/{x}/{y}.png'");
 		out.println("			,{attribution: \"<a href='http://osm.org/copyright' target='_blank'>OpenStreetMap</a> contributors\" }).addTo(map);");
 		out.println("			//マーカーを地図に追加");
-		out.println("			//L.marker(mpoint).bindPopup(L.popup().setContent(\"大森駅\")).bindTooltip(\"大森駅\").addTo(map);");
-		out.println("			L.marker(mpoint).bindTooltip(\"大森駅\").addTo(map);");
 
 	    try {
 	    	// DAOオブジェクト化

@@ -69,7 +69,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("			text-align:center;");
 		out.println("		}");
 		out.println("		.shopname {");
-		out.println("			text-align:center;");
+		out.println("			text-align:left;");
 		out.println("		}");
 		out.println("		.errmsg {");
 		out.println("			text-align:center;");
@@ -84,6 +84,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		.comments{");
 		out.println("			width:300px;");
 		out.println("			height:100px;");
+		out.println("			text-align:left;");
 		out.println("		}");
 		out.println("		.cmntouter {");
 		out.println("			height: 150px;");
