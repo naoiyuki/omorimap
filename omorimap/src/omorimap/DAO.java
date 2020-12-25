@@ -76,6 +76,8 @@ public class DAO {
 		    		objDto.setIp(rs.getString("ip"));
 		    		objDto.setCategoryno(rs.getInt("categoryno"));
 		    		objDto.setStar(rs.getInt("star"));
+		    		objDto.setLatitude(rs.getDouble("latitude"));
+		    		objDto.setLongitude(rs.getDouble("longitude"));
 
 		    		list.add(objDto);
 		    	}
@@ -119,12 +121,14 @@ public class DAO {
 		}
 
 		//レコードをDBに追加
-		public static void insertRcd(int no,String shopname,String comments,Date dt,String ip,int categoryno,int star){
+		public static void insertRcd(int no,String shopname,String comments,Date dt,String ip,int categoryno
+				,int star,double latitude,double longitude){
 	        Connection conn = null;
 	        PreparedStatement pstmt = null;
 
 	        // SQL文作成
-	        String sql = "INSERT INTO list (no,shopname,comments,dt,ip,categoryno,star) VALUES (?,?,?,?,?,?,?)";
+	        String sql = "INSERT INTO list (no,shopname,comments,dt,ip,categoryno,star,latitude,longitude) "
+	        		+ "VALUES (?,?,?,?,?,?,?,?,?)";
 
 			try {
 				conn= DAO.createConnection();
@@ -137,6 +141,8 @@ public class DAO {
 				pstmt.setString(5,ip);
 				pstmt.setInt(6,categoryno);
 				pstmt.setInt(7, star);
+				pstmt.setDouble(8, latitude);
+				pstmt.setDouble(9, longitude);
 
 				//SQLをDBへ発行
 				pstmt.executeUpdate();
@@ -226,42 +232,46 @@ public class DAO {
 	        }
 		}
 		//レコードをDBに上書き
-				public static void updateRcd(int id,String shopname,String comments,Date dt,String ip,int categoryno,int star){
-			        Connection conn = null;
-			        PreparedStatement pstmt = null;
+		public static void updateRcd(int id,String shopname,String comments,Date dt,String ip,int categoryno
+				,int star,double latitude,double longitude){
+	        Connection conn = null;
+	        PreparedStatement pstmt = null;
 
-			        // SQL文作成
-			        String sql = "UPDATE list SET `shopname` = ?,`comments` = ?,`dt` = ?,`ip` = ?,`categoryno` = ?,`star` = ? WHERE `id` = ?;";
+	        // SQL文作成
+	        String sql = "UPDATE list SET `shopname` = ?,`comments` = ?,`dt` = ?,`ip` = ?,`categoryno` = ?"
+	        		+ ",`star` = ?,`latitude` = ?,`longitude` = ? WHERE `id` = ?;";
 
-					try {
-						conn= DAO.createConnection();
-						pstmt = conn.prepareStatement(sql);
+			try {
+				conn= DAO.createConnection();
+				pstmt = conn.prepareStatement(sql);
 
-						pstmt.setString(1,shopname);
-						pstmt.setString(2,comments);
-						pstmt.setDate(3,dt);
-						pstmt.setString(4,ip);
-						pstmt.setInt(5,categoryno);
-						pstmt.setInt(6, star);
-						pstmt.setInt(7, id);
+				pstmt.setString(1,shopname);
+				pstmt.setString(2,comments);
+				pstmt.setDate(3,dt);
+				pstmt.setString(4,ip);
+				pstmt.setInt(5,categoryno);
+				pstmt.setInt(6, star);
+				pstmt.setDouble(7, latitude);
+				pstmt.setDouble(8, longitude);
+				pstmt.setInt(9, id);
 
-						//SQLをDBへ発行
-						pstmt.executeUpdate();
+				//SQLをDBへ発行
+				pstmt.executeUpdate();
 
-						//接続などを閉じる
-				    	pstmt.close();
-				    	DAO.disConnection(conn);
+				//接続などを閉じる
+		    	pstmt.close();
+		    	DAO.disConnection(conn);
 
-					}catch(SQLException e){
-			            System.out.println("Errorが発生しました！\n"+e);
-			        }finally{
-			            // リソースの開放
-			            if(pstmt != null){
-			                try{pstmt.close();}catch(SQLException ignore){}
-			            }
-			            if(conn != null){
-			                try{conn.close();}catch(SQLException ignore){}
-			            }
-			        }
-				}
+			}catch(SQLException e){
+	            System.out.println("Errorが発生しました！\n"+e);
+	        }finally{
+	            // リソースの開放
+	            if(pstmt != null){
+	                try{pstmt.close();}catch(SQLException ignore){}
+	            }
+	            if(conn != null){
+	                try{conn.close();}catch(SQLException ignore){}
+	            }
+	        }
+		}
 }

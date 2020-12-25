@@ -35,16 +35,22 @@ public class OmorimapSub extends HttpServlet {
 		PrintWriter out=response.getWriter();
 
 		//パラメータを取得
-		String errMsg = (String)request.getAttribute("errMsg");	//OmorimapSubの全項目に記入がされなかった時のエラー表示用の変数
-		String shopname =  request.getParameter("shopname");	//記入されなかった場合に店舗名を返す
-		String comments =  request.getParameter("comments");	//記入されなかった場合にコメントを返す
+		String errMsg = (String)request.getAttribute("errMsg");		//OmorimapSubの全項目に記入がされなかった時のエラー表示用の変数
+		String shopname =  request.getParameter("shopname");		//記入されなかった場合に店舗名を返す
+		String comments =  request.getParameter("comments");		//記入されなかった場合にコメントを返す
 		String categoryno =  request.getParameter("categoryno");	//記入されなかった場合にカテゴリー番号を返す
-		String star =  request.getParameter("star");	//記入されなかった場合に評価を返す
-		String strNumId = request.getParameter("numid");	//Omorimapで選択されたレコードのid
-		String rshopname = (String)request.getAttribute("shopname");	//Omorimapで選択されたレコードのshopname
-		String rcomments = (String)request.getAttribute("comments");	//Omorimapで選択されたレコードのcomments
+		String star =  request.getParameter("star");				//記入されなかった場合に評価を返す
+		String latitude =  request.getParameter("latitude");		//記入されなかった場合に緯度を返す
+		String longitude =  request.getParameter("longitude");		//記入されなかった場合に経度を返す
+		String strNumId = request.getParameter("numid");					//Omorimapで選択されたレコードのid
+		String rshopname = (String)request.getAttribute("shopname");		//Omorimapで選択されたレコードのshopname
+		String rcomments = (String)request.getAttribute("comments");		//Omorimapで選択されたレコードのcomments
 		String rcategoryno = (String)request.getAttribute("categoryno");	//Omorimapで選択されたレコードのcategoryno
-		String rstar = (String)request.getAttribute("star");	//Omorimapで選択されたレコードのstar
+		String rstar = (String)request.getAttribute("star");				//Omorimapで選択されたレコードのstar
+		String rlatitude = (String)request.getAttribute("latitude");		//Omorimapで選択されたレコードのstar
+		String rlongitude = (String)request.getAttribute("longitude");		//Omorimapで選択されたレコードのstar
+		category_master = Category_masterListDTO.getCategory_master();		//登録されたカテゴリーマスター
+
 
 		out.println("<!DOCTYPE html>");
 		out.println("<html>");
@@ -95,26 +101,38 @@ public class OmorimapSub extends HttpServlet {
 		out.println("	<link rel=\"stylesheet\" href=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.css\" />");
 		out.println("	<script src=\"https://unpkg.com/leaflet@1.3.0/dist/leaflet.js\"></script>");
 		out.println("	<script type=\"text/javascript\">");
+		out.println("	//保存ボタンの処理");
 		out.println("	function btnsave(){");
 		out.println("	  	ret = confirm(\"保存します。よろしいですか？\");");
 		out.println("	  	if (ret == true){");
 		out.println("		  	document.form1.submit();");
 		out.println("	  	}");
 		out.println("	}");
+		out.println("	//キャンセルボタンの処理");
 		out.println("	function btncancel(){");
 		out.println("	  	ret = confirm(\"一覧画面に戻ります。よろしいですか？\");");
 		out.println("	  	if (ret == true){");
 		out.println("		  	location.href=\"/omorimap/Omorimap\";");
 		out.println("	  	}");
 		out.println("	}");
+		out.println("	//地図表示の処理");
 		out.println("	var marker;		//マーカー");
 		out.println("	var lat;		//マーカー移動後の緯度");
 		out.println("	var lng;		//マーカー移動後の緯度");
 		out.println("	function init() {");
 		out.println("		//地図を表示するdiv要素のidを設定");
 		out.println("		var map = L.map('mapcontainer');");
-		out.println("		//中心座標の指定:大森駅");
-		out.println("		var mpoint = [35.589249385284106, 139.7278683];");
+
+		//マーカーの設置
+		if(shopname != null) {
+			out.println("		var mpoint = [" + latitude + ", " + longitude + "];");
+		} else if(rshopname != null) {
+			out.println("		var mpoint = [" + rlatitude + ", " + rlongitude + "];");
+		} else {
+			out.println("		//中心座標の指定:大森駅");
+			out.println("		var mpoint = [35.589249385284106, 139.7278683];");
+		}
+
 		out.println("		//地図の中心とズームレベルを指定");
 		out.println("		map.setView(mpoint, 17);");
 		out.println("		//表示するタイルレイヤのURLとAttributionコントロールの記述を設定して、地図に追加する");
@@ -138,12 +156,14 @@ public class OmorimapSub extends HttpServlet {
 		out.println("	<div id=\"mapcontainer\" style=\"height:500px\"></div>");
 		out.println("		<div class = \"sub\">");
 		out.println("			<p class=\"title\">新規投稿＆編集画面</p>");
+
+		//エラーメッセージの表示
 		if(errMsg != null) {
-			out.println("				<p class=\"errmsg\">");
-			out.println(errMsg);
-			out.println("				</p>");
+			out.println("				<p class=\"errmsg\">"+ errMsg + "</p>");
 		}
+
 		out.println("			<form name=\"form1\" action=\"/omorimap/EntryServlet\" method=\"post\">");
+
 		//編集の場合、渡されたidをhidden型でインプット
 		if(strNumId != null) {
 			out.println("			<input type=\"hidden\" name=\"numid\" value=\"" + strNumId + "\">");
@@ -151,6 +171,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("				<p class=\"shopname\">店舗名&nbsp;");
 		out.println("					<input type = \"text\" name=\"shopname\" style=\"width:300px;\" maxlength=\"30\" value=\"");
 
+		//店名の再表示
 		if(shopname != null) {
 			out.println(shopname);
 		} else if(rshopname != null) {
@@ -164,8 +185,7 @@ public class OmorimapSub extends HttpServlet {
 		out.println("						<select name=\"categoryno\">");
 		out.println("							<option selected hidden></option>");
 
-		category_master = Category_masterListDTO.getCategory_master();
-
+		//カテゴリーの再表示
 		for(int i = 0;i < category_master.size();i++) {
 			Category_masterDTO objCDto = category_master.get(i);
 
@@ -176,10 +196,13 @@ public class OmorimapSub extends HttpServlet {
 			}
 			out.println(">" + objCDto.getCategoryname() + "</option>");
 		}
+
 		out.println("						</select>");
 		out.println("					</p>");
 		out.println("				</div>");
 		out.println("				<div class=\"star\">評価");
+
+		//評価の再表示
 		for(int i = 1;i <= 5;i++) {
 			out.println("					<input type=\"radio\" name=\"star\" value=\""
 					+ i + "\"");
@@ -189,12 +212,15 @@ public class OmorimapSub extends HttpServlet {
 			}
 			out.println("					>" + i);
 		}
+
 		out.println("				</div>");
 		out.println("				<div class=\"cmntouter\">");
 		out.println("						<span class=\"cmntinner\">コメント</span>");
 		out.println("						<span class=\"cmntinner\">");
 		out.println("							<textarea name=\"comments\" class=\"comments\" maxlength=\"100\">");
 
+
+		//コメントの再表示
 		if(comments != null) {
 			out.println(comments);
 		} else if (rcomments != null) {
