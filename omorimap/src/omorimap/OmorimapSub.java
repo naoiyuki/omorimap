@@ -127,11 +127,17 @@ public class OmorimapSub extends HttpServlet {
 		//マーカーの設置
 		if(shopname != null) {
 			out.println("		var mpoint = [" + latitude + ", " + longitude + "];");
+			out.println("    		document.getElementById('lat').value=" + latitude + ";");
+			out.println("    		document.getElementById('lng').value=" + longitude + ";");
 		} else if(rshopname != null) {
 			out.println("		var mpoint = [" + rlatitude + ", " + rlongitude + "];");
+			out.println("    		document.getElementById('lat').value=" + rlatitude + ";");
+			out.println("    		document.getElementById('lng').value=" + rlongitude + ";");
 		} else {
 			out.println("		//中心座標の指定:大森駅");
 			out.println("		var mpoint = [35.589249385284106, 139.7278683];");
+			out.println("    		document.getElementById('lat').value= 35.589249385284106;");
+			out.println("    		document.getElementById('lng').value= 139.7278683;");
 		}
 
 		out.println("		//地図の中心とズームレベルを指定");
