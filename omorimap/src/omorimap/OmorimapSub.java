@@ -147,8 +147,6 @@ public class OmorimapSub extends HttpServlet {
 			//初回の座標
 			out.println("		//中心座標の指定:大森駅");
 			out.println("		var mpoint = [35.589249385284106, 139.7278683];");
-//			out.println("    	document.getElementById('lat').value=35.589249385284106;");
-//			out.println("    	document.getElementById('lng').value=139.7278683;");
 		}
 
 		out.println("		//地図の中心とズームレベルを指定");
