@@ -75,6 +75,7 @@ public class EntryServlet extends HttpServlet {
 			String strShopnameStripped =  StringUtils.strip(strShopname);
 			String strCommentsStripped = StringUtils.strip(strComments);
 			String strCategorynoStripped = StringUtils.strip(strCategoryno);
+			String strLatitudeStripped = StringUtils.strip(strLatitude);
 			if("".equals(strShopnameStripped)) {
 				errMsg += "店舗名を入力して下さい。<br>";
 			}
@@ -86,6 +87,9 @@ public class EntryServlet extends HttpServlet {
 			}
 			if(strStar == null) {
 				errMsg += "評価を選択して下さい。<br>";
+			}
+			if("".equals(strLatitudeStripped)) {
+				errMsg += "	地図のマーカーを移動して下さい。<br>";
 			}
 			if(errMsg != "") {
 				request.setAttribute("errMsg",errMsg);

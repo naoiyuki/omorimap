@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Servlet implementation class OmorimapSub
  */
@@ -125,19 +127,28 @@ public class OmorimapSub extends HttpServlet {
 		out.println("		var map = L.map('mapcontainer');");
 
 		//マーカーの設置
-		if(shopname != null) {
-			out.println("		var mpoint = [" + latitude + ", " + longitude + "];");
-			out.println("    		document.getElementById('lat').value=" + latitude + ";");
-			out.println("    		document.getElementById('lng').value=" + longitude + ";");
-		} else if(rshopname != null) {
+		if(latitude != null) {
+			String latitudeStripped = StringUtils.strip(latitude);
+			if("".equals(latitudeStripped)) {
+				//新規登録の際に移動しなかった場合、もう一度大森駅の座標を設定
+				out.println("		var mpoint = [35.589249385284106, 139.7278683];");
+			} else {
+				//移動した座標の再表示する際の座標
+				out.println("		var mpoint = [" + latitude + ", " + longitude + "];");
+				out.println("    	document.getElementById('lat').value=" + latitude + ";");
+				out.println("    	document.getElementById('lng').value=" + longitude + ";");
+			}
+		} else if(rlatitude != null) {
+			//編集登録の初期の座標
 			out.println("		var mpoint = [" + rlatitude + ", " + rlongitude + "];");
-			out.println("    		document.getElementById('lat').value=" + rlatitude + ";");
-			out.println("    		document.getElementById('lng').value=" + rlongitude + ";");
+			out.println("    	document.getElementById('lat').value=" + rlatitude + ";");
+			out.println("    	document.getElementById('lng').value=" + rlongitude + ";");
 		} else {
+			//初回の座標
 			out.println("		//中心座標の指定:大森駅");
 			out.println("		var mpoint = [35.589249385284106, 139.7278683];");
-			out.println("    		document.getElementById('lat').value= 35.589249385284106;");
-			out.println("    		document.getElementById('lng').value= 139.7278683;");
+//			out.println("    	document.getElementById('lat').value=35.589249385284106;");
+//			out.println("    	document.getElementById('lng').value=139.7278683;");
 		}
 
 		out.println("		//地図の中心とズームレベルを指定");
