@@ -158,7 +158,7 @@ public class Omorimap extends HttpServlet {
 			out.println("<body onload=\"init()\">");
 			out.println("<body>");
 			out.println("	<div class=\"main\">");
-			out.println("	<div id=\"mapcontainer\" style=\"height:500px\"></div>");
+			out.println("	<div id=\"mapcontainer\" style=\"height:600px\"></div>");
 			out.println("<h4 align=\"right\">");
 			out.println(fdate1);
 			out.println("</h4>");
