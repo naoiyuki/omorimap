@@ -4,7 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+//現在時刻を取得するクラス
 public class NowTime {
+	//サーブレット用　現在時刻
 	public static String nowTime() {
 		Calendar cal1 = Calendar.getInstance();
 		Date date1 = cal1.getTime();
@@ -14,6 +16,7 @@ public class NowTime {
 		return fdate1;
 	}
 
+	//sql用　現在時刻
 	public static java.sql.Date nowSqlTime(){
 		java.util.Date utilDate = new java.util.Date();
 		java.sql.Date sDate = new java.sql.Date(utilDate.getTime());
